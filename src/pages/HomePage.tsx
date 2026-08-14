@@ -1,6 +1,7 @@
 import { useMemo, useState, type MouseEvent } from "react";
 import { massifs, resorts, type Massif } from "../data/resorts";
 import { ResortCard } from "../components/ResortCard";
+import { MassifIcon } from "../components/MassifIcon";
 import { massifTheme } from "../lib/massifTheme";
 
 export function HomePage() {
@@ -172,14 +173,16 @@ export function HomePage() {
               const theme = massifTheme[group.massif];
               return (
                 <section key={group.massif}>
-                  <div className="mb-4 flex items-baseline gap-3">
+                  <div className="mb-4 flex items-center gap-3">
                     <h2 className={`font-display text-3xl tracking-wide ${theme.text}`}>
                       {group.massif.toUpperCase()}
                     </h2>
-                    <span className="text-sm text-slate-400">
+                    <span className="text-sm whitespace-nowrap text-slate-400">
                       {group.resorts.length} resort{group.resorts.length === 1 ? "" : "s"}
                     </span>
                     <div className={`h-px flex-1 bg-gradient-to-r ${theme.gradient} opacity-30`} />
+                    <MassifIcon massif={group.massif} className="h-9 shrink-0 text-cyan-600" />
+                    <div className={`h-px flex-1 bg-gradient-to-l ${theme.gradient} opacity-30`} />
                   </div>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {group.resorts.map((resort) => (
