@@ -125,7 +125,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <p className="rise-in mx-auto mt-6 max-w-xl text-cyan-400 [animation-delay:0.2s]">
+          <p className="rise-in mx-auto mt-10 max-w-xl text-cyan-600 [animation-delay:0.2s]">
             Live 7-day forecasts and snow depth for skiers &amp; riders — base, mid-mountain and
             summit, updated all season.
           </p>
