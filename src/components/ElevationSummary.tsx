@@ -11,10 +11,10 @@ export function ElevationSummary({
   const weather = describeWeatherCode(forecast.current.weatherCode);
 
   return (
-    <div className="flex-1 rounded-lg border border-slate-800 bg-slate-900 p-5">
+    <div className="flex-1 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <h3 className="font-display text-lg tracking-wide text-white">{label.toUpperCase()}</h3>
-        <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs text-slate-400">
+        <h3 className="font-display text-lg tracking-wide text-slate-900">{label.toUpperCase()}</h3>
+        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-500">
           {forecast.elevation}m
         </span>
       </div>
@@ -24,25 +24,25 @@ export function ElevationSummary({
           {weather.icon}
         </span>
         <div>
-          <p className="font-display text-4xl text-white">{forecast.current.tempC}°</p>
-          <p className="text-sm text-slate-400">{weather.label}</p>
+          <p className="font-display text-4xl text-slate-900">{forecast.current.tempC}°</p>
+          <p className="text-sm text-slate-500">{weather.label}</p>
         </div>
       </div>
 
       <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
-        <div className="rounded-md bg-slate-950/60 p-2.5">
-          <dt className="text-xs text-slate-500">Snow depth</dt>
+        <div className="rounded-md bg-slate-50 p-2.5">
+          <dt className="text-xs text-slate-400">Snow depth</dt>
           <dd
             className={`font-display text-lg tracking-wide ${
-              forecast.snowDepthCm ? "text-cyan-300" : "text-slate-300"
+              forecast.snowDepthCm ? "text-blue-600" : "text-slate-700"
             }`}
           >
             {forecast.snowDepthCm != null ? `${forecast.snowDepthCm}cm` : "—"}
           </dd>
         </div>
-        <div className="rounded-md bg-slate-950/60 p-2.5">
-          <dt className="text-xs text-slate-500">Wind</dt>
-          <dd className="font-display text-lg tracking-wide text-slate-300">
+        <div className="rounded-md bg-slate-50 p-2.5">
+          <dt className="text-xs text-slate-400">Wind</dt>
+          <dd className="font-display text-lg tracking-wide text-slate-700">
             {forecast.current.windKmh}km/h
           </dd>
         </div>

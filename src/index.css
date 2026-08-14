@@ -6,13 +6,13 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   margin: 0;
-  background-color: var(--color-slate-950);
-  color: var(--color-slate-100);
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
 }
 
 @keyframes snowfall {

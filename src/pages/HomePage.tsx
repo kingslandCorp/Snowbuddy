@@ -30,23 +30,23 @@ export function HomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-slate-800 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950">
+      <section className="relative overflow-hidden bg-gradient-to-b from-sky-500 via-blue-600 to-blue-700">
         <div className="snowfall pointer-events-none absolute inset-0" />
         <svg
-          className="pointer-events-none absolute inset-x-0 bottom-0 w-full text-slate-950"
+          className="pointer-events-none absolute inset-x-0 bottom-0 w-full text-slate-50"
           viewBox="0 0 1200 220"
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <path d="M0 220 L0 130 L180 60 L340 150 L520 40 L720 140 L900 70 L1080 160 L1200 100 L1200 220 Z" fill="currentColor" opacity="0.5" />
+          <path d="M0 220 L0 130 L180 60 L340 150 L520 40 L720 140 L900 70 L1080 160 L1200 100 L1200 220 Z" fill="#ffffff" opacity="0.35" />
           <path d="M0 220 L0 170 L220 110 L420 190 L640 90 L860 180 L1040 120 L1200 170 L1200 220 Z" fill="currentColor" />
         </svg>
 
         <div className="relative mx-auto max-w-5xl px-4 py-16 text-center sm:py-24">
           <h1 className="font-display text-5xl tracking-wide text-white sm:text-7xl">
-            FIND THE <span className="text-cyan-400">SNOW</span>
+            FIND THE <span className="text-cyan-200">SNOW</span>
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-slate-300">
+          <p className="mx-auto mt-3 max-w-xl text-blue-50">
             Live 7-day forecasts and snow depth for {resorts.length} UK &amp; European resorts — base
             to summit.
           </p>
@@ -57,7 +57,7 @@ export function HomePage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search resorts, regions, countries…"
-              className="w-full rounded-full border border-slate-700 bg-slate-900/80 px-5 py-3 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+              className="w-full rounded-full border border-white/40 bg-white px-5 py-3 text-slate-900 placeholder:text-slate-400 focus:border-white focus:outline-none"
             />
           </div>
         </div>
@@ -69,8 +69,8 @@ export function HomePage() {
             onClick={() => setMassif("All")}
             className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
               massif === "All"
-                ? "border-cyan-500 bg-cyan-500/15 text-cyan-300"
-                : "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
+                ? "border-blue-600 bg-blue-50 text-blue-700"
+                : "border-slate-300 bg-white text-slate-500 hover:border-slate-400 hover:text-slate-700"
             }`}
           >
             All regions
@@ -85,7 +85,7 @@ export function HomePage() {
                 className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
                   active
                     ? `border-transparent bg-gradient-to-r ${theme.gradient} text-white`
-                    : "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
+                    : "border-slate-300 bg-white text-slate-500 hover:border-slate-400 hover:text-slate-700"
                 }`}
               >
                 {m}
@@ -106,10 +106,10 @@ export function HomePage() {
                     <h2 className={`font-display text-3xl tracking-wide ${theme.text}`}>
                       {group.massif.toUpperCase()}
                     </h2>
-                    <span className="text-sm text-slate-500">
+                    <span className="text-sm text-slate-400">
                       {group.resorts.length} resort{group.resorts.length === 1 ? "" : "s"}
                     </span>
-                    <div className={`h-px flex-1 bg-gradient-to-r ${theme.gradient} opacity-40`} />
+                    <div className={`h-px flex-1 bg-gradient-to-r ${theme.gradient} opacity-30`} />
                   </div>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {group.resorts.map((resort) => (

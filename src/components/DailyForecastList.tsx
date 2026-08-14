@@ -11,9 +11,9 @@ const POWDER_THRESHOLD_CM = 5;
 
 export function DailyForecastList({ days, title }: { days: DailyForecast[]; title: string }) {
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
-      <h3 className="font-display mb-4 text-lg tracking-wide text-white">{title.toUpperCase()}</h3>
-      <div className="flex flex-col divide-y divide-slate-800">
+    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 className="font-display mb-4 text-lg tracking-wide text-slate-900">{title.toUpperCase()}</h3>
+      <div className="flex flex-col divide-y divide-slate-100">
         {days.map((day, i) => {
           const weather = describeWeatherCode(day.weatherCode);
           const isPowderDay = day.snowfallCm >= POWDER_THRESHOLD_CM;
@@ -21,19 +21,19 @@ export function DailyForecastList({ days, title }: { days: DailyForecast[]; titl
             <div
               key={day.date}
               className={`grid grid-cols-[minmax(0,1.4fr)_auto_auto_auto] items-center gap-3 py-2.5 text-sm ${
-                isPowderDay ? "rounded-md bg-cyan-500/10 px-2" : ""
+                isPowderDay ? "rounded-md bg-blue-50 px-2" : ""
               }`}
             >
-              <span className="text-slate-300">{formatDay(day.date, i)}</span>
+              <span className="text-slate-700">{formatDay(day.date, i)}</span>
               <span className="text-xl" aria-hidden="true" title={weather.label}>
                 {weather.icon}
               </span>
-              <span className="text-slate-500">
+              <span className="text-slate-400">
                 {day.tempMinC}° / {day.tempMaxC}°
               </span>
               <span
                 className={`justify-self-end font-display tracking-wide ${
-                  isPowderDay ? "text-cyan-300" : "text-slate-400"
+                  isPowderDay ? "text-blue-600" : "text-slate-500"
                 }`}
               >
                 {day.snowfallCm > 0 ? `❄ ${day.snowfallCm}cm` : "–"}
