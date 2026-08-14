@@ -125,17 +125,17 @@ export function HomePage() {
               />
             </div>
           </div>
-
-          <p className="rise-in mx-auto mt-[60px] max-w-xl text-cyan-600 [animation-delay:0.2s]">
-            Live 7-day forecasts and snow depth for skiers &amp; riders —
-            <br />
-            base, mid-mountain and summit, updated all season.
-          </p>
         </div>
       </section>
 
-      <div className="mx-auto max-w-5xl px-4 py-10">
-        <div className="mb-10 flex flex-wrap justify-center gap-2">
+      <div className="mx-auto max-w-5xl px-4 pt-8 pb-10">
+        <p className="mx-auto max-w-xl text-center text-cyan-600">
+          Live 7-day forecasts and snow depth for skiers &amp; riders —
+          <br />
+          base, mid-mountain and summit, updated all season.
+        </p>
+
+        <div className="mt-5 mb-10 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => setMassif("All")}
             className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
