@@ -53,7 +53,7 @@ export function HomePage() {
         <div className="snowfall pointer-events-none absolute inset-0" />
 
         <svg
-          className="mountain-layer pointer-events-none absolute inset-x-0 bottom-0 h-16 w-[170%] max-w-none sm:h-24"
+          className="mountain-layer pointer-events-none absolute inset-x-0 bottom-0 h-23 w-[170%] max-w-none sm:h-31"
           style={{ transform: "translateX(calc(-35% + var(--mx, 0) * 90px))" }}
           viewBox="0 0 1200 240"
           preserveAspectRatio="none"
@@ -62,7 +62,7 @@ export function HomePage() {
           <path d="M0 240 L0 150 L150 70 L300 160 L460 50 L620 150 L780 60 L940 160 L1100 90 L1200 140 L1200 240 Z" fill="#ffffff" opacity="0.2" />
         </svg>
         <svg
-          className="mountain-layer pointer-events-none absolute inset-x-0 bottom-0 h-16 w-[170%] max-w-none sm:h-24"
+          className="mountain-layer pointer-events-none absolute inset-x-0 bottom-0 h-23 w-[170%] max-w-none sm:h-31"
           style={{ transform: "translateX(calc(-35% + var(--mx, 0) * -160px))" }}
           viewBox="0 0 1200 240"
           preserveAspectRatio="none"
@@ -71,7 +71,7 @@ export function HomePage() {
           <path d="M0 240 L0 180 L180 110 L360 190 L560 90 L760 180 L940 120 L1100 175 L1200 150 L1200 240 Z" fill="#ffffff" opacity="0.4" />
         </svg>
         <svg
-          className="mountain-layer text-slate-50 pointer-events-none absolute inset-x-0 bottom-0 h-16 w-[170%] max-w-none sm:h-24"
+          className="mountain-layer text-slate-50 pointer-events-none absolute inset-x-0 bottom-0 h-23 w-[170%] max-w-none sm:h-31"
           style={{ transform: "translateX(calc(-35% + var(--mx, 0) * 250px))" }}
           viewBox="0 0 1200 240"
           preserveAspectRatio="none"
@@ -83,7 +83,7 @@ export function HomePage() {
           />
         </svg>
 
-        <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-8 text-center sm:pt-12">
+        <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-15 text-center sm:pt-12">
           <h1 className="font-display rise-in text-6xl tracking-wide text-white drop-shadow-sm sm:text-8xl">
             FIND THE{" "}
             <span className="relative inline-block text-cyan-400" style={{ textShadow: "0 0 40px rgba(6,182,212,0.8)" }}>
@@ -128,7 +128,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-5xl px-4 pt-8 pb-10">
+      <div className="mx-auto max-w-5xl px-4 pt-1 pb-10">
         <p className="mx-auto max-w-xl text-center text-cyan-600">
           Live 7-day forecasts and snow depth for skiers &amp; riders —
           <br />
