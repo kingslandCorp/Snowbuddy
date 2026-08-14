@@ -59,7 +59,7 @@ export function HomePage() {
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <path d="M0 240 L0 150 L150 70 L300 160 L460 50 L620 150 L780 60 L940 160 L1100 90 L1200 140 L1200 240 Z" fill="#ffffff" opacity="0.2" />
+          <path d="M0 240 L0 210 L80 25 L150 195 L230 15 L310 205 L400 20 L480 200 L570 15 L650 210 L740 30 L820 195 L910 20 L990 205 L1080 35 L1160 190 L1200 160 L1200 240 Z" fill="#ffffff" opacity="0.2" />
         </svg>
         <svg
           className="mountain-layer pointer-events-none absolute inset-x-0 bottom-0 h-23 w-[170%] max-w-none sm:h-31"
@@ -68,7 +68,7 @@ export function HomePage() {
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <path d="M0 240 L0 180 L180 110 L360 190 L560 90 L760 180 L940 120 L1100 175 L1200 150 L1200 240 Z" fill="#ffffff" opacity="0.4" />
+          <path d="M0 240 L0 195 L50 205 L120 20 L200 200 L280 10 L360 195 L440 25 L520 205 L600 15 L680 200 L760 30 L840 195 L920 10 L1000 205 L1080 25 L1160 195 L1200 175 L1200 240 Z" fill="#ffffff" opacity="0.4" />
         </svg>
         <svg
           className="mountain-layer text-slate-50 pointer-events-none absolute inset-x-0 bottom-0 h-23 w-[170%] max-w-none sm:h-31"
@@ -78,7 +78,7 @@ export function HomePage() {
           aria-hidden="true"
         >
           <path
-            d="M0 240 L0 200 L220 150 L420 210 L640 130 L860 205 L1040 160 L1200 200 L1200 240 Z"
+            d="M0 240 L0 205 L70 195 L140 15 L210 205 L290 10 L370 200 L450 20 L530 210 L610 15 L690 195 L770 25 L850 205 L930 10 L1010 200 L1090 30 L1170 195 L1200 180 L1200 240 Z"
             fill="currentColor"
           />
         </svg>
