@@ -83,7 +83,7 @@ export function HomePage() {
           />
         </svg>
 
-        <div className="relative mx-auto max-w-5xl px-4 py-8 text-center sm:py-12">
+        <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-8 text-center sm:pt-12">
           <h1 className="font-display rise-in text-6xl tracking-wide text-white drop-shadow-sm sm:text-8xl">
             FIND THE{" "}
             <span className="relative inline-block text-cyan-400" style={{ textShadow: "0 0 40px rgba(6,182,212,0.8)" }}>
