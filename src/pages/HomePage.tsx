@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
-import { countries, resorts } from "../data/resorts";
+import { massifs, resorts, type Massif } from "../data/resorts";
 import { ResortCard } from "../components/ResortCard";
 
 export function HomePage() {
   const [query, setQuery] = useState("");
-  const [country, setCountry] = useState("All");
+  const [massif, setMassif] = useState<Massif | "All">("All");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -14,10 +14,18 @@ export function HomePage() {
         r.name.toLowerCase().includes(q) ||
         r.region.toLowerCase().includes(q) ||
         r.country.toLowerCase().includes(q);
-      const matchesCountry = country === "All" || r.country === country;
-      return matchesQuery && matchesCountry;
+      const matchesMassif = massif === "All" || r.massif === massif;
+      return matchesQuery && matchesMassif;
     });
-  }, [query, country]);
+  }, [query, massif]);
+
+  const groups = useMemo(
+    () =>
+      massifs
+        .map((m) => ({ massif: m, resorts: filtered.filter((r) => r.massif === m) }))
+        .filter((g) => g.resorts.length > 0),
+    [filtered],
+  );
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -39,27 +47,39 @@ export function HomePage() {
           className="w-full rounded-lg border border-alpine-200 bg-white px-4 py-2.5 text-alpine-900 placeholder:text-alpine-400 focus:border-alpine-400 focus:outline-none dark:border-alpine-800 dark:bg-alpine-900 dark:text-white"
         />
         <select
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
+          value={massif}
+          onChange={(e) => setMassif(e.target.value as Massif | "All")}
           className="rounded-lg border border-alpine-200 bg-white px-4 py-2.5 text-alpine-900 focus:border-alpine-400 focus:outline-none dark:border-alpine-800 dark:bg-alpine-900 dark:text-white sm:w-56"
         >
-          <option value="All">All countries</option>
-          {countries.map((c) => (
-            <option key={c} value={c}>
-              {c}
+          <option value="All">All regions</option>
+          {massifs.map((m) => (
+            <option key={m} value={m}>
+              {m}
             </option>
           ))}
         </select>
       </div>
 
-      {filtered.length === 0 ? (
+      {groups.length === 0 ? (
         <p className="text-center text-alpine-500 dark:text-alpine-400">
           No resorts match "{query}".
         </p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((resort) => (
-            <ResortCard key={resort.slug} resort={resort} />
+        <div className="flex flex-col gap-10">
+          {groups.map((group) => (
+            <section key={group.massif}>
+              <h2 className="mb-4 flex items-baseline gap-2 text-xl font-semibold text-alpine-900 dark:text-white">
+                {group.massif}
+                <span className="text-sm font-normal text-alpine-400 dark:text-alpine-500">
+                  {group.resorts.length} resort{group.resorts.length === 1 ? "" : "s"}
+                </span>
+              </h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {group.resorts.map((resort) => (
+                  <ResortCard key={resort.slug} resort={resort} />
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       )}
