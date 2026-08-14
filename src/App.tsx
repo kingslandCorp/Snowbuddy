@@ -6,7 +6,7 @@ import { ResortPage } from "./pages/ResortPage";
 
 function App() {
   return (
-    <div className="flex min-h-screen flex-col bg-snow-50 dark:bg-alpine-950">
+    <div className="flex min-h-screen flex-col bg-slate-950">
       <Header />
       <main className="flex-1">
         <Routes>

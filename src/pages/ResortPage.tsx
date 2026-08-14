@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { getResortBySlug } from "../data/resorts";
 import { useResortForecast } from "../lib/useResortForecast";
+import { massifTheme } from "../lib/massifTheme";
 import { ElevationSummary } from "../components/ElevationSummary";
 import { DailyForecastList } from "../components/DailyForecastList";
 
@@ -12,29 +13,36 @@ export function ResortPage() {
   if (!resort) {
     return (
       <div className="mx-auto max-w-5xl px-4 py-16 text-center">
-        <p className="text-alpine-600 dark:text-alpine-300">Resort not found.</p>
-        <Link to="/" className="mt-4 inline-block text-alpine-500 underline dark:text-alpine-400">
+        <p className="text-slate-300">Resort not found.</p>
+        <Link to="/" className="mt-4 inline-block text-cyan-400 underline">
           Back to all resorts
         </Link>
       </div>
     );
   }
 
+  const theme = massifTheme[resort.massif];
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
-      <Link to="/" className="text-sm text-alpine-500 hover:underline dark:text-alpine-400">
+      <Link to="/" className="text-sm text-slate-400 hover:text-cyan-400">
         ← All resorts
       </Link>
 
-      <div className="mt-2 mb-8">
-        <h1 className="text-3xl font-bold text-alpine-900 dark:text-white">{resort.name}</h1>
-        <p className="text-alpine-600 dark:text-alpine-300">
+      <div className="mt-3 mb-8">
+        <span className={`inline-block rounded-full bg-gradient-to-r ${theme.gradient} px-3 py-0.5 text-xs font-semibold text-white`}>
+          {resort.massif}
+        </span>
+        <h1 className="font-display mt-2 text-4xl tracking-wide text-white sm:text-5xl">
+          {resort.name.toUpperCase()}
+        </h1>
+        <p className="text-slate-400">
           {resort.region}, {resort.country} · {resort.baseElevation}m–{resort.topElevation}m
         </p>
       </div>
 
-      {loading && <p className="text-alpine-500 dark:text-alpine-400">Loading forecast…</p>}
-      {error && <p className="text-red-500">Couldn't load the forecast: {error}</p>}
+      {loading && <p className="text-slate-400">Loading forecast…</p>}
+      {error && <p className="text-red-400">Couldn't load the forecast: {error}</p>}
 
       {data && (
         <div className="flex flex-col gap-6">

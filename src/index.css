@@ -2,28 +2,42 @@
 
 @theme {
   --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
-
-  --color-snow-50: #f3f8fc;
-  --color-snow-100: #e4eef7;
-  --color-snow-200: #c9dcef;
-
-  --color-alpine-50: #eef7ff;
-  --color-alpine-100: #d9edff;
-  --color-alpine-200: #b3d9ff;
-  --color-alpine-300: #7fbdff;
-  --color-alpine-400: #4499ff;
-  --color-alpine-500: #1c78f0;
-  --color-alpine-600: #135bc4;
-  --color-alpine-700: #12489c;
-  --color-alpine-800: #133d7e;
-  --color-alpine-900: #0f2c56;
-  --color-alpine-950: #0a1c38;
+  --font-display: "Bebas Neue", "Inter", system-ui, sans-serif;
 }
 
 html {
-  color-scheme: light dark;
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
+  background-color: var(--color-slate-950);
+  color: var(--color-slate-100);
+}
+
+@keyframes snowfall {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      200px 400px,
+      -150px 300px,
+      100px 500px;
+  }
+}
+
+.snowfall {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(2px 2px at 140px 120px, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1.5px 1.5px at 90px 200px, rgba(255, 255, 255, 0.4), transparent);
+  background-size:
+    200px 200px,
+    180px 180px,
+    220px 220px;
+  animation: snowfall 18s linear infinite;
 }

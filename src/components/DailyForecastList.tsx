@@ -7,23 +7,35 @@ function formatDay(dateStr: string, index: number) {
   return date.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
 }
 
+const POWDER_THRESHOLD_CM = 5;
+
 export function DailyForecastList({ days, title }: { days: DailyForecast[]; title: string }) {
   return (
-    <div className="rounded-xl border border-alpine-100 bg-white p-5 dark:border-alpine-800 dark:bg-alpine-900">
-      <h3 className="mb-4 font-semibold text-alpine-900 dark:text-white">{title}</h3>
-      <div className="flex flex-col divide-y divide-alpine-100 dark:divide-alpine-800">
+    <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+      <h3 className="font-display mb-4 text-lg tracking-wide text-white">{title.toUpperCase()}</h3>
+      <div className="flex flex-col divide-y divide-slate-800">
         {days.map((day, i) => {
           const weather = describeWeatherCode(day.weatherCode);
+          const isPowderDay = day.snowfallCm >= POWDER_THRESHOLD_CM;
           return (
-            <div key={day.date} className="grid grid-cols-[minmax(0,1.4fr)_auto_auto_auto] items-center gap-3 py-2.5 text-sm">
-              <span className="text-alpine-700 dark:text-alpine-200">{formatDay(day.date, i)}</span>
+            <div
+              key={day.date}
+              className={`grid grid-cols-[minmax(0,1.4fr)_auto_auto_auto] items-center gap-3 py-2.5 text-sm ${
+                isPowderDay ? "rounded-md bg-cyan-500/10 px-2" : ""
+              }`}
+            >
+              <span className="text-slate-300">{formatDay(day.date, i)}</span>
               <span className="text-xl" aria-hidden="true" title={weather.label}>
                 {weather.icon}
               </span>
-              <span className="text-alpine-500 dark:text-alpine-400">
+              <span className="text-slate-500">
                 {day.tempMinC}° / {day.tempMaxC}°
               </span>
-              <span className="justify-self-end font-medium text-alpine-800 dark:text-alpine-100">
+              <span
+                className={`justify-self-end font-display tracking-wide ${
+                  isPowderDay ? "text-cyan-300" : "text-slate-400"
+                }`}
+              >
                 {day.snowfallCm > 0 ? `❄ ${day.snowfallCm}cm` : "–"}
               </span>
             </div>
