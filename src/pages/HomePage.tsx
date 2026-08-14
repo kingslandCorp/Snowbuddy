@@ -1,14 +1,21 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { massifs, resorts, getResortBySlug, type Massif } from "../data/resorts";
+import { useMemo, useState, type MouseEvent } from "react";
+import { massifs, resorts, type Massif } from "../data/resorts";
 import { ResortCard } from "../components/ResortCard";
 import { massifTheme } from "../lib/massifTheme";
-
-const POPULAR_SLUGS = ["chamonix", "zermatt", "verbier", "val-thorens"];
 
 export function HomePage() {
   const [query, setQuery] = useState("");
   const [massif, setMassif] = useState<Massif | "All">("All");
+
+  const handleHeroMouseMove = (e: MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width - 0.5;
+    e.currentTarget.style.setProperty("--mx", relX.toFixed(3));
+  };
+
+  const handleHeroMouseLeave = (e: MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.setProperty("--mx", "0");
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -33,42 +40,50 @@ export function HomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-gradient-to-b from-sky-400 via-blue-600 to-blue-700">
+      <section
+        onMouseMove={handleHeroMouseMove}
+        onMouseLeave={handleHeroMouseLeave}
+        className="relative overflow-hidden bg-gradient-to-b from-sky-400 via-blue-600 to-blue-700"
+      >
         <div className="hero-glow pointer-events-none absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-cyan-200/30 blur-3xl" />
         <div className="hero-glow pointer-events-none absolute top-0 right-1/4 h-72 w-72 rounded-full bg-white/20 blur-3xl [animation-delay:-7s]" />
         <div className="snowfall pointer-events-none absolute inset-0" />
 
         <svg
-          className="pointer-events-none absolute inset-x-0 bottom-0 w-full"
+          className="mountain-layer pointer-events-none absolute inset-x-0 bottom-0 w-[130%] max-w-none"
+          style={{ transform: "translateX(calc(-15% + var(--mx, 0) * 30px))" }}
           viewBox="0 0 1200 240"
           preserveAspectRatio="none"
           aria-hidden="true"
         >
           <path d="M0 240 L0 150 L150 70 L300 160 L460 50 L620 150 L780 60 L940 160 L1100 90 L1200 140 L1200 240 Z" fill="#ffffff" opacity="0.2" />
+        </svg>
+        <svg
+          className="mountain-layer pointer-events-none absolute inset-x-0 bottom-0 w-[130%] max-w-none"
+          style={{ transform: "translateX(calc(-15% + var(--mx, 0) * -55px))" }}
+          viewBox="0 0 1200 240"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
           <path d="M0 240 L0 180 L180 110 L360 190 L560 90 L760 180 L940 120 L1100 175 L1200 150 L1200 240 Z" fill="#ffffff" opacity="0.4" />
+        </svg>
+        <svg
+          className="mountain-layer text-slate-50 pointer-events-none absolute inset-x-0 bottom-0 w-[130%] max-w-none"
+          style={{ transform: "translateX(calc(-15% + var(--mx, 0) * 85px))" }}
+          viewBox="0 0 1200 240"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
           <path
             d="M0 240 L0 200 L220 150 L420 210 L640 130 L860 205 L1040 160 L1200 200 L1200 240 Z"
-            className="text-slate-50"
             fill="currentColor"
           />
         </svg>
 
         <div className="relative mx-auto max-w-5xl px-4 py-16 text-center sm:py-24">
-          <div className="rise-in mb-5 flex flex-wrap justify-center gap-2">
-            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-              🏔️ {resorts.length} RESORTS
-            </span>
-            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-              🗺️ {massifs.length} REGIONS
-            </span>
-            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-              📡 LIVE DATA
-            </span>
-          </div>
-
-          <h1 className="font-display rise-in text-6xl tracking-wide text-white drop-shadow-sm sm:text-8xl [animation-delay:0.1s]">
+          <h1 className="font-display rise-in text-6xl tracking-wide text-white drop-shadow-sm sm:text-8xl">
             FIND THE{" "}
-            <span className="relative inline-block text-cyan-200" style={{ textShadow: "0 0 40px rgba(103,232,249,0.7)" }}>
+            <span className="relative inline-block text-cyan-400" style={{ textShadow: "0 0 40px rgba(6,182,212,0.8)" }}>
               SNOW
               <svg
                 className="pointer-events-none absolute -bottom-1 left-0 h-4 w-full sm:-bottom-2 sm:h-6"
@@ -87,12 +102,12 @@ export function HomePage() {
               </svg>
             </span>
           </h1>
-          <p className="rise-in mx-auto mt-4 max-w-xl text-blue-50 [animation-delay:0.2s]">
+          <p className="rise-in mx-auto mt-4 max-w-xl text-blue-50 [animation-delay:0.1s]">
             Live 7-day forecasts and snow depth for skiers &amp; riders — base, mid-mountain and
             summit, updated all season.
           </p>
 
-          <div className="rise-in mx-auto mt-8 max-w-lg [animation-delay:0.3s]">
+          <div className="rise-in mx-auto mt-8 max-w-lg [animation-delay:0.2s]">
             <div className="relative">
               <svg
                 className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-slate-400"
@@ -110,23 +125,6 @@ export function HomePage() {
                 placeholder="Search resorts, regions, countries…"
                 className="w-full rounded-full border border-white/40 bg-white py-3.5 pr-5 pl-11 text-slate-900 placeholder:text-slate-400 shadow-lg shadow-blue-900/20 transition focus:border-white focus:ring-4 focus:ring-cyan-200/50 focus:outline-none"
               />
-            </div>
-
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1.5 text-sm">
-              <span className="text-blue-100">Popular:</span>
-              {POPULAR_SLUGS.map((slug) => {
-                const resort = getResortBySlug(slug);
-                if (!resort) return null;
-                return (
-                  <Link
-                    key={slug}
-                    to={`/resorts/${slug}`}
-                    className="rounded-full bg-white/15 px-3 py-1 font-medium text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/25"
-                  >
-                    {resort.name}
-                  </Link>
-                );
-              })}
             </div>
           </div>
         </div>

@@ -84,3 +84,7 @@ body {
 .rise-in {
   animation: rise-in 0.6s ease-out both;
 }
+
+.mountain-layer {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
