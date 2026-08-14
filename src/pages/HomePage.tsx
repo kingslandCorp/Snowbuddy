@@ -181,7 +181,7 @@ export function HomePage() {
                       {group.resorts.length} resort{group.resorts.length === 1 ? "" : "s"}
                     </span>
                     <div className={`h-px flex-1 bg-gradient-to-r ${theme.gradient} opacity-30`} />
-                    <MassifIcon massif={group.massif} className="h-9 shrink-0 text-cyan-600" />
+                    <MassifIcon massif={group.massif} className="h-14 shrink-0 text-cyan-600" />
                     <div className={`h-px flex-1 bg-gradient-to-l ${theme.gradient} opacity-30`} />
                   </div>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
