@@ -104,12 +104,7 @@ export function HomePage() {
               </svg>
             </span>
           </h1>
-          <p className="rise-in mx-auto mt-4 max-w-xl text-blue-50 [animation-delay:0.1s]">
-            Live 7-day forecasts and snow depth for skiers &amp; riders — base, mid-mountain and
-            summit, updated all season.
-          </p>
-
-          <div className="rise-in mx-auto mt-8 max-w-lg [animation-delay:0.2s]">
+          <div className="rise-in mx-auto mt-6 max-w-lg [animation-delay:0.1s]">
             <div className="relative">
               <svg
                 className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-slate-400"
@@ -129,6 +124,11 @@ export function HomePage() {
               />
             </div>
           </div>
+
+          <p className="rise-in mx-auto mt-6 max-w-xl text-cyan-400 [animation-delay:0.2s]">
+            Live 7-day forecasts and snow depth for skiers &amp; riders — base, mid-mountain and
+            summit, updated all season.
+          </p>
         </div>
       </section>
 
