@@ -26,6 +26,7 @@ export interface ElevationForecast {
 
 export interface ResortForecast {
   base: ElevationForecast;
+  mid: ElevationForecast;
   top: ElevationForecast;
 }
 
@@ -107,9 +108,11 @@ export async function fetchResortForecast(
   resort: Resort,
   signal?: AbortSignal,
 ): Promise<ResortForecast> {
-  const [base, top] = await Promise.all([
+  const midElevation = Math.round((resort.baseElevation + resort.topElevation) / 2);
+  const [base, mid, top] = await Promise.all([
     fetchElevationForecast(resort.lat, resort.lon, resort.baseElevation, signal),
+    fetchElevationForecast(resort.lat, resort.lon, midElevation, signal),
     fetchElevationForecast(resort.lat, resort.lon, resort.topElevation, signal),
   ]);
-  return { base, top };
+  return { base, mid, top };
 }
