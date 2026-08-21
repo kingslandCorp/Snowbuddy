@@ -1,10 +1,23 @@
 import type { ResortWebcams } from "../data/resorts";
 
-const STOPS: { key: keyof Omit<ResortWebcams, "general">; title: string }[] = [
-  { key: "summit", title: "Summit webcam" },
-  { key: "mid", title: "Mid-mountain webcam" },
-  { key: "base", title: "Base webcam" },
+type Tier = "base" | "mid" | "summit";
+
+const TIERS: { key: Tier; label: string }[] = [
+  { key: "base", label: "Base" },
+  { key: "mid", label: "Mid" },
+  { key: "summit", label: "Summit" },
 ];
+
+/** A single mountain glyph reused for all three tiers — the dot's height marks the tier. */
+function TierIcon({ tier }: { tier: Tier }) {
+  const dotY = tier === "summit" ? 7 : tier === "mid" ? 12 : 17;
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4 text-slate-400" fill="none" aria-hidden="true">
+      <path d="M3 19 L12 5 L21 19 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <circle cx="12" cy={dotY} r="1.6" fill="currentColor" />
+    </svg>
+  );
+}
 
 function CameraIcon() {
   return (
@@ -20,7 +33,7 @@ function CameraIcon() {
   );
 }
 
-function WebcamStop({ href, title }: { href?: string; title: string }) {
+function WebcamButton({ href, title }: { href?: string; title: string }) {
   if (!href) {
     return (
       <div
@@ -48,28 +61,33 @@ function WebcamStop({ href, title }: { href?: string; title: string }) {
 export function WebcamLinks({ webcams }: { webcams?: ResortWebcams }) {
   if (!webcams) return null;
 
-  const hasSplit = STOPS.some(({ key }) => webcams[key]);
+  const hasSplit = TIERS.some(({ key }) => webcams[key]);
 
-  if (!hasSplit && !webcams.general) return null;
+  if (!hasSplit) {
+    if (!webcams.general) return null;
+    return (
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 className="font-display text-lg tracking-wide text-slate-900">WEBCAMS</h3>
+        <div className="mt-4 flex justify-center">
+          <WebcamButton href={webcams.general} title="Resort webcams" />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-fit rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      <h3 className="font-display text-lg tracking-wide text-slate-900">WEBCAMS</h3>
-
-      {hasSplit ? (
-        <div className="mt-4 flex flex-col items-center">
-          {STOPS.map(({ key, title }, i) => (
-            <div key={key} className="flex flex-col items-center">
-              <WebcamStop href={webcams[key]} title={title} />
-              {i < STOPS.length - 1 && <div className="h-6 w-px bg-slate-200" />}
-            </div>
-          ))}
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {TIERS.map(({ key, label }) => (
+        <div key={key} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center gap-1.5">
+            <TierIcon tier={key} />
+            <h3 className="font-display text-lg tracking-wide text-slate-900">{label.toUpperCase()}</h3>
+          </div>
+          <div className="mt-4 flex justify-center">
+            <WebcamButton href={webcams[key]} title={`${label} webcam`} />
+          </div>
         </div>
-      ) : (
-        <div className="mt-4 flex justify-center">
-          <WebcamStop href={webcams.general} title="Resort webcams" />
-        </div>
-      )}
+      ))}
     </div>
   );
 }
