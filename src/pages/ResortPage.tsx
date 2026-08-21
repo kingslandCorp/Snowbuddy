@@ -5,6 +5,7 @@ import { massifTheme } from "../lib/massifTheme";
 import { ElevationSummary } from "../components/ElevationSummary";
 import { DailyForecastList } from "../components/DailyForecastList";
 import { WebcamLinks } from "../components/WebcamLinks";
+import { TierHeaderRow } from "../components/TierHeaderRow";
 
 export function ResortPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -23,6 +24,9 @@ export function ResortPage() {
   }
 
   const theme = massifTheme[resort.massif];
+  const hasWebcams = Boolean(
+    resort.webcams && (resort.webcams.general || resort.webcams.base || resort.webcams.mid || resort.webcams.summit)
+  );
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -47,18 +51,28 @@ export function ResortPage() {
 
       {data && (
         <div className="flex flex-col gap-6">
+          <TierHeaderRow />
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <ElevationSummary label="Base" forecast={data.base} />
-            <ElevationSummary label="Mid" forecast={data.mid} />
-            <ElevationSummary label="Summit" forecast={data.top} />
+            <ElevationSummary forecast={data.base} />
+            <ElevationSummary forecast={data.mid} />
+            <ElevationSummary forecast={data.top} />
           </div>
 
-          <WebcamLinks webcams={resort.webcams} />
+          {hasWebcams && (
+            <div>
+              <h2 className="font-display mb-3 text-lg tracking-wide text-slate-900">WEBCAM</h2>
+              <WebcamLinks slug={resort.slug} webcams={resort.webcams} />
+            </div>
+          )}
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-            <DailyForecastList title="Base — 7 day" days={data.base.daily} />
-            <DailyForecastList title="Mid — 7 day" days={data.mid.daily} />
-            <DailyForecastList title="Summit — 7 day" days={data.top.daily} />
+          <div>
+            <h2 className="font-display mb-3 text-lg tracking-wide text-slate-900">7 DAY</h2>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+              <DailyForecastList days={data.base.daily} />
+              <DailyForecastList days={data.mid.daily} />
+              <DailyForecastList days={data.top.daily} />
+            </div>
           </div>
         </div>
       )}
