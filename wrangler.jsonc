@@ -15,5 +15,11 @@
   "routes": [
     { "pattern": "www.snowbuddy.co.uk", "custom_domain": true },
     { "pattern": "snowbuddy.co.uk", "custom_domain": true }
-  ]
+  ],
+  "kv_namespaces": [
+    { "binding": "WEBCAM_KV", "id": "97f58c714f604998a92a91ca914650b3" }
+  ],
+  "triggers": {
+    "crons": ["0 11 * * *"]
+  }
 }
