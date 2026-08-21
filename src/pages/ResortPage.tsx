@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { getResortBySlug } from "../data/resorts";
 import { useResortForecast } from "../lib/useResortForecast";
+import { usePageMeta } from "../lib/usePageMeta";
 import { massifTheme } from "../lib/massifTheme";
 import { ElevationSummary } from "../components/ElevationSummary";
 import { DailyForecastList } from "../components/DailyForecastList";
@@ -11,6 +12,16 @@ export function ResortPage() {
   const { slug } = useParams<{ slug: string }>();
   const resort = slug ? getResortBySlug(slug) : undefined;
   const { data, loading, error } = useResortForecast(resort);
+
+  usePageMeta({
+    title: resort
+      ? `${resort.name} Snow Report & Forecast | SnowBuddy`
+      : "Resort not found | SnowBuddy",
+    description: resort
+      ? `Live snow depth and 7-day forecast for ${resort.name}, ${resort.region}, ${resort.country} — base, mid and summit conditions from ${resort.baseElevation}m to ${resort.topElevation}m.`
+      : "Resort not found on SnowBuddy.",
+    path: slug ? `/resorts/${slug}` : "/resorts",
+  });
 
   if (!resort) {
     return (

@@ -3,10 +3,17 @@ import { massifs, resorts, type Massif } from "../data/resorts";
 import { ResortCard } from "../components/ResortCard";
 import { MassifIcon } from "../components/MassifIcon";
 import { massifTheme } from "../lib/massifTheme";
+import { usePageMeta } from "../lib/usePageMeta";
 
 export function HomePage() {
   const [query, setQuery] = useState("");
   const [massif, setMassif] = useState<Massif | "All">("All");
+
+  usePageMeta({
+    title: "SnowBuddy — Snow Forecasts for UK & European Resorts",
+    description: "SnowBuddy — live snow depth and forecasts for UK & European ski resorts.",
+    path: "/",
+  });
 
   const handleHeroMouseMove = (e: MouseEvent<HTMLElement>) => {
     e.currentTarget.classList.remove("settling");
