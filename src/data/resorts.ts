@@ -1,5 +1,13 @@
 export type Massif = "Alps" | "Dolomites" | "Pyrenees" | "Highlands";
 
+export interface ResortWebcams {
+  base?: string;
+  mid?: string;
+  summit?: string;
+  /** Fallback single webcam/webcam-portal link when base/mid/summit aren't separately available */
+  general?: string;
+}
+
 export interface Resort {
   slug: string;
   name: string;
@@ -14,6 +22,7 @@ export interface Resort {
   baseElevation: number;
   /** Highest lift-served point, metres */
   topElevation: number;
+  webcams?: ResortWebcams;
 }
 
 /** Display order for massif groupings. */
@@ -21,59 +30,83 @@ export const massifs: Massif[] = ["Alps", "Dolomites", "Pyrenees", "Highlands"];
 
 export const resorts: Resort[] = [
   // France — Alps
-  { slug: "chamonix", name: "Chamonix", country: "France", region: "Mont Blanc", massif: "Alps", lat: 45.9237, lon: 6.8694, baseElevation: 1035, topElevation: 3300 },
-  { slug: "val-disere", name: "Val d'Isère", country: "France", region: "Tarentaise", massif: "Alps", lat: 45.4489, lon: 6.9797, baseElevation: 1850, topElevation: 3456 },
-  { slug: "tignes", name: "Tignes", country: "France", region: "Tarentaise", massif: "Alps", lat: 45.4674, lon: 6.9061, baseElevation: 2100, topElevation: 3456 },
-  { slug: "les-deux-alpes", name: "Les Deux Alpes", country: "France", region: "Isère", massif: "Alps", lat: 45.0119, lon: 6.1225, baseElevation: 1650, topElevation: 3568 },
-  { slug: "courchevel", name: "Courchevel", country: "France", region: "Three Valleys", massif: "Alps", lat: 45.4147, lon: 6.6349, baseElevation: 1300, topElevation: 2738 },
-  { slug: "meribel", name: "Méribel", country: "France", region: "Three Valleys", massif: "Alps", lat: 45.3974, lon: 6.5658, baseElevation: 1450, topElevation: 2952 },
-  { slug: "val-thorens", name: "Val Thorens", country: "France", region: "Three Valleys", massif: "Alps", lat: 45.2977, lon: 6.5799, baseElevation: 2300, topElevation: 3230 },
-  { slug: "la-plagne", name: "La Plagne", country: "France", region: "Paradiski", massif: "Alps", lat: 45.5061, lon: 6.6764, baseElevation: 1970, topElevation: 3250 },
-  { slug: "alpe-dhuez", name: "Alpe d'Huez", country: "France", region: "Isère", massif: "Alps", lat: 45.0909, lon: 6.07, baseElevation: 1860, topElevation: 3330 },
-  { slug: "serre-chevalier", name: "Serre Chevalier", country: "France", region: "Hautes-Alpes", massif: "Alps", lat: 44.944, lon: 6.554, baseElevation: 1400, topElevation: 2830 },
-  { slug: "la-rosiere", name: "La Rosière", country: "France", region: "Tarentaise", massif: "Alps", lat: 45.6206, lon: 6.8425, baseElevation: 1850, topElevation: 2650 },
-  { slug: "avoriaz", name: "Avoriaz", country: "France", region: "Portes du Soleil", massif: "Alps", lat: 46.1917, lon: 6.7729, baseElevation: 1800, topElevation: 2466 },
+  { slug: "chamonix", name: "Chamonix", country: "France", region: "Mont Blanc", massif: "Alps", lat: 45.9237, lon: 6.8694, baseElevation: 1035, topElevation: 3300, webcams: { base: "https://chamonix.panomax.com/houches", mid: "https://chamonix.panomax.com/brevent", summit: "https://chamonix.panomax.com/aiguille-du-midi" } },
+  { slug: "val-disere", name: "Val d'Isère", country: "France", region: "Tarentaise", massif: "Alps", lat: 45.4489, lon: 6.9797, baseElevation: 1850, topElevation: 3456, webcams: { base: "https://valdisere.roundshot.com/village/", summit: "https://valdisere.roundshot.com/bellevarde/" } },
+  { slug: "tignes", name: "Tignes", country: "France", region: "Tarentaise", massif: "Alps", lat: 45.4674, lon: 6.9061, baseElevation: 2100, topElevation: 3456, webcams: { base: "https://tignes.roundshot.com/lac/", mid: "https://tignes.roundshot.com/toviere/", summit: "https://tignes.roundshot.com/grande-motte/" } },
+  { slug: "les-deux-alpes", name: "Les Deux Alpes", country: "France", region: "Isère", massif: "Alps", lat: 45.0119, lon: 6.1225, baseElevation: 1650, topElevation: 3568, webcams: { general: "https://www.mairie2alpes.fr/webcams/" } },
+  { slug: "courchevel", name: "Courchevel", country: "France", region: "Three Valleys", massif: "Alps", lat: 45.4147, lon: 6.6349, baseElevation: 1300, topElevation: 2738, webcams: { mid: "https://courchevel.roundshot.com/signal/", general: "https://www.seecourchevel.com/webcams/" } },
+  { slug: "meribel", name: "Méribel", country: "France", region: "Three Valleys", massif: "Alps", lat: 45.3974, lon: 6.5658, baseElevation: 1450, topElevation: 2952, webcams: { general: "https://www.les3vallees.com/en/live/webcams/meribel" } },
+  { slug: "val-thorens", name: "Val Thorens", country: "France", region: "Three Valleys", massif: "Alps", lat: 45.2977, lon: 6.5799, baseElevation: 2300, topElevation: 3230, webcams: { general: "https://www.seevalthorens.com/webcams/" } },
+  { slug: "la-plagne", name: "La Plagne", country: "France", region: "Paradiski", massif: "Alps", lat: 45.5061, lon: 6.6764, baseElevation: 1970, topElevation: 3250, webcams: { general: "https://en.la-plagne.com/discover/ski-area/webcams" } },
+  { slug: "alpe-dhuez", name: "Alpe d'Huez", country: "France", region: "Isère", massif: "Alps", lat: 45.0909, lon: 6.07, baseElevation: 1860, topElevation: 3330, webcams: { general: "https://skipass.alpedhuez.com/hiver/en/webcams/" } },
+  { slug: "serre-chevalier", name: "Serre Chevalier", country: "France", region: "Hautes-Alpes", massif: "Alps", lat: 44.944, lon: 6.554, baseElevation: 1400, topElevation: 2830, webcams: { general: "https://www.serre-chevalier.com/en/ski-area/webcam-live-serre-chevalier-briancon" } },
+  { slug: "la-rosiere", name: "La Rosière", country: "France", region: "Tarentaise", massif: "Alps", lat: 45.6206, lon: 6.8425, baseElevation: 1850, topElevation: 2650, webcams: { general: "https://www.larosiere.net/en/webcams/" } },
+  { slug: "avoriaz", name: "Avoriaz", country: "France", region: "Portes du Soleil", massif: "Alps", lat: 46.1917, lon: 6.7729, baseElevation: 1800, topElevation: 2466, webcams: { general: "https://avoriaz-holidays.roundshot.com/" } },
+  { slug: "morzine", name: "Morzine", country: "France", region: "Portes du Soleil", massif: "Alps", lat: 46.1791, lon: 6.7093, baseElevation: 1000, topElevation: 2466, webcams: { general: "https://en.portesdusoleil.com/webcams/webcam-morzine/" } },
+  { slug: "les-gets", name: "Les Gets", country: "France", region: "Portes du Soleil", massif: "Alps", lat: 46.1594, lon: 6.6683, baseElevation: 1172, topElevation: 2002, webcams: { summit: "https://en.portesdusoleil.com/webcams/webcam-les-gets/" } },
+  { slug: "la-clusaz", name: "La Clusaz", country: "France", region: "Aravis", massif: "Alps", lat: 45.9042, lon: 6.4239, baseElevation: 1040, topElevation: 2600, webcams: { general: "https://www.laclusaz.com/en/webcams/" } },
+  { slug: "le-grand-bornand", name: "Le Grand-Bornand", country: "France", region: "Aravis", massif: "Alps", lat: 45.9436, lon: 6.4276, baseElevation: 934, topElevation: 2100, webcams: { general: "https://en.legrandbornand.com/webcams/" } },
+  { slug: "megeve", name: "Megève", country: "France", region: "Mont Blanc", massif: "Alps", lat: 45.8567, lon: 6.6178, baseElevation: 1113, topElevation: 2350, webcams: { general: "https://www.megeve-tourisme.fr/en/informations-pratiques/infos-live/webcams/" } },
+  { slug: "flaine", name: "Flaine", country: "France", region: "Grand Massif", massif: "Alps", lat: 46.0044, lon: 6.6981, baseElevation: 1600, topElevation: 2500, webcams: { general: "https://www.grand-massif.com/en/webcams/" } },
+  { slug: "chamrousse", name: "Chamrousse", country: "France", region: "Belledonne", massif: "Alps", lat: 45.1131, lon: 5.8875, baseElevation: 1400, topElevation: 2250, webcams: { general: "https://www.chamrousse.com/webcams.html" } },
+  { slug: "les-arcs", name: "Les Arcs", country: "France", region: "Paradiski", massif: "Alps", lat: 45.5719, lon: 6.8285, baseElevation: 1600, topElevation: 3226, webcams: { general: "https://en.lesarcs.com/webcams-1" } },
 
   // Switzerland — Alps
-  { slug: "zermatt", name: "Zermatt", country: "Switzerland", region: "Valais", massif: "Alps", lat: 46.0207, lon: 7.7491, baseElevation: 1620, topElevation: 3899 },
-  { slug: "verbier", name: "Verbier", country: "Switzerland", region: "Valais", massif: "Alps", lat: 46.0967, lon: 7.2286, baseElevation: 1500, topElevation: 3330 },
-  { slug: "st-moritz", name: "St. Moritz", country: "Switzerland", region: "Graubünden", massif: "Alps", lat: 46.4908, lon: 9.8355, baseElevation: 1856, topElevation: 3057 },
-  { slug: "wengen", name: "Wengen", country: "Switzerland", region: "Jungfrau", massif: "Alps", lat: 46.6058, lon: 7.9219, baseElevation: 1274, topElevation: 2320 },
-  { slug: "grindelwald", name: "Grindelwald", country: "Switzerland", region: "Jungfrau", massif: "Alps", lat: 46.6244, lon: 8.0414, baseElevation: 1034, topElevation: 2971 },
-  { slug: "davos", name: "Davos", country: "Switzerland", region: "Graubünden", massif: "Alps", lat: 46.8027, lon: 9.836, baseElevation: 1560, topElevation: 2844 },
-  { slug: "crans-montana", name: "Crans-Montana", country: "Switzerland", region: "Valais", massif: "Alps", lat: 46.3092, lon: 7.4844, baseElevation: 1500, topElevation: 3000 },
-  { slug: "engelberg", name: "Engelberg", country: "Switzerland", region: "Central Switzerland", massif: "Alps", lat: 46.8194, lon: 8.4058, baseElevation: 1000, topElevation: 3020 },
+  { slug: "zermatt", name: "Zermatt", country: "Switzerland", region: "Valais", massif: "Alps", lat: 46.0207, lon: 7.7491, baseElevation: 1620, topElevation: 3899, webcams: { base: "https://zermatt.roundshot.com/zermatterhof/", mid: "https://zermatt.roundshot.com/sunnegga/", summit: "https://zbag.roundshot.com/matterhornglacierparadise/" } },
+  { slug: "verbier", name: "Verbier", country: "Switzerland", region: "Valais", massif: "Alps", lat: 46.0967, lon: 7.2286, baseElevation: 1500, topElevation: 3330, webcams: { base: "https://lecarrefour.roundshot.com/", mid: "https://verbier.roundshot.com/les-attelas/", summit: "https://verbier.roundshot.com/montfort/" } },
+  { slug: "st-moritz", name: "St. Moritz", country: "Switzerland", region: "Graubünden", massif: "Alps", lat: 46.4908, lon: 9.8355, baseElevation: 1856, topElevation: 3057, webcams: { base: "https://schweizerhof.roundshot.com/stmoritz/", general: "https://www.stmoritz.com/en/live/webcams" } },
+  { slug: "wengen", name: "Wengen", country: "Switzerland", region: "Jungfrau", massif: "Alps", lat: 46.6058, lon: 7.9219, baseElevation: 1274, topElevation: 2320, webcams: { base: "https://bellevue.roundshot.com/", summit: "https://maennlichen.roundshot.com/" } },
+  { slug: "grindelwald", name: "Grindelwald", country: "Switzerland", region: "Jungfrau", massif: "Alps", lat: 46.6244, lon: 8.0414, baseElevation: 1034, topElevation: 2971, webcams: { base: "https://kirchbuehl.roundshot.com/", summit: "https://grindelwald.roundshot.com/mittellegihuette/" } },
+  { slug: "davos", name: "Davos", country: "Switzerland", region: "Graubünden", massif: "Alps", lat: 46.8027, lon: 9.836, baseElevation: 1560, topElevation: 2844, webcams: { general: "https://www.davosklostersmountains.ch/en/mountains/winter/live-info/webcams" } },
+  { slug: "crans-montana", name: "Crans-Montana", country: "Switzerland", region: "Valais", massif: "Alps", lat: 46.3092, lon: 7.4844, baseElevation: 1500, topElevation: 3000, webcams: { summit: "https://cma.roundshot.com/grandsignal/", general: "https://www.crans-montana.ch/en/webcam" } },
+  { slug: "engelberg", name: "Engelberg", country: "Switzerland", region: "Central Switzerland", massif: "Alps", lat: 46.8194, lon: 8.4058, baseElevation: 1000, topElevation: 3020, webcams: { summit: "https://titlis.roundshot.com/titlis/", general: "https://www.engelberg.ch/en/webcams/" } },
+  { slug: "saas-fee", name: "Saas-Fee", country: "Switzerland", region: "Valais", massif: "Alps", lat: 46.1089, lon: 7.9294, baseElevation: 1800, topElevation: 3600, webcams: { base: "https://saastal.roundshot.com/dorf/", summit: "https://hohsaas.roundshot.com/3200/" } },
+  { slug: "adelboden", name: "Adelboden", country: "Switzerland", region: "Bernese Oberland", massif: "Alps", lat: 46.4919, lon: 7.5597, baseElevation: 1353, topElevation: 2362, webcams: { mid: "https://tschentenalp.roundshot.com/" } },
+  { slug: "villars", name: "Villars", country: "Switzerland", region: "Vaud Alps", massif: "Alps", lat: 46.3, lon: 7.0561, baseElevation: 1300, topElevation: 2120, webcams: { base: "https://aigloncollege.roundshot.com/", mid: "https://tvgd.roundshot.com/bretaye/" } },
+  { slug: "gstaad", name: "Gstaad", country: "Switzerland", region: "Bernese Oberland", massif: "Alps", lat: 46.4719, lon: 7.2856, baseElevation: 1050, topElevation: 3000, webcams: { base: "https://palacegstaad.roundshot.com/", general: "https://www.gstaad.ch/en/quick-links/weather-webcams" } },
+  { slug: "andermatt", name: "Andermatt", country: "Switzerland", region: "Central Switzerland", massif: "Alps", lat: 46.6336, lon: 8.5942, baseElevation: 1444, topElevation: 2963, webcams: { base: "https://andermatt.roundshot.com/city/", summit: "https://andermatt-sedrun-disentis.roundshot.com/gemsstock/" } },
 
   // Austria — Alps
-  { slug: "st-anton", name: "St. Anton am Arlberg", country: "Austria", region: "Arlberg", massif: "Alps", lat: 47.1288, lon: 10.2639, baseElevation: 1304, topElevation: 2811 },
-  { slug: "kitzbuhel", name: "Kitzbühel", country: "Austria", region: "Tyrol", massif: "Alps", lat: 47.4467, lon: 12.3927, baseElevation: 762, topElevation: 2000 },
-  { slug: "solden", name: "Sölden", country: "Austria", region: "Ötztal", massif: "Alps", lat: 46.9664, lon: 10.9927, baseElevation: 1377, topElevation: 3340 },
-  { slug: "ischgl", name: "Ischgl", country: "Austria", region: "Paznaun", massif: "Alps", lat: 47.0169, lon: 10.2925, baseElevation: 1377, topElevation: 2872 },
-  { slug: "mayrhofen", name: "Mayrhofen", country: "Austria", region: "Zillertal", massif: "Alps", lat: 47.1667, lon: 11.8667, baseElevation: 630, topElevation: 2500 },
-  { slug: "obergurgl", name: "Obergurgl-Hochgurgl", country: "Austria", region: "Ötztal", massif: "Alps", lat: 46.8697, lon: 11.0261, baseElevation: 1930, topElevation: 3082 },
-  { slug: "saalbach", name: "Saalbach-Hinterglemm", country: "Austria", region: "Salzburgerland", massif: "Alps", lat: 47.3897, lon: 12.6383, baseElevation: 1003, topElevation: 2096 },
-  { slug: "kaprun", name: "Zell am See-Kaprun", country: "Austria", region: "Salzburgerland", massif: "Alps", lat: 47.2431, lon: 12.6931, baseElevation: 757, topElevation: 3029 },
+  { slug: "st-anton", name: "St. Anton am Arlberg", country: "Austria", region: "Arlberg", massif: "Alps", lat: 47.1288, lon: 10.2639, baseElevation: 1304, topElevation: 2811, webcams: { base: "https://www.bergfex.com/stanton-stchristoph/webcams/c362/", mid: "https://www.bergfex.com/stanton-stchristoph/webcams/c799/", summit: "https://www.bergfex.com/stanton-stchristoph/webcams/c275/" } },
+  { slug: "lech", name: "Lech", country: "Austria", region: "Arlberg", massif: "Alps", lat: 47.2081, lon: 10.1414, baseElevation: 1450, topElevation: 2811, webcams: { base: "https://www.bergfex.com/lech-zuers-arlberg/webcams/c10331/", mid: "https://www.bergfex.com/lech-zuers-arlberg/webcams/c3482/", summit: "https://www.bergfex.com/lech-zuers-arlberg/webcams/c3483/" } },
+  { slug: "kitzbuhel", name: "Kitzbühel", country: "Austria", region: "Tyrol", massif: "Alps", lat: 47.4467, lon: 12.3927, baseElevation: 762, topElevation: 2000, webcams: { base: "https://www.foto-webcam.eu/webcam/zielhaus-hahnenkamm/", mid: "https://www.foto-webcam.eu/webcam/starthaus-hahnenkamm/", summit: "https://www.bergfex.com/kitzbuehel-kirchberg/webcams/c24977/" } },
+  { slug: "solden", name: "Sölden", country: "Austria", region: "Ötztal", massif: "Alps", lat: 46.9664, lon: 10.9927, baseElevation: 1377, topElevation: 3340, webcams: { base: "https://www.bergfex.com/soelden/webcams/c22557/", mid: "https://www.bergfex.com/soelden/webcams/c21829/", summit: "https://www.bergfex.com/soelden/webcams/c3014/" } },
+  { slug: "ischgl", name: "Ischgl", country: "Austria", region: "Paznaun", massif: "Alps", lat: 47.0169, lon: 10.2925, baseElevation: 1377, topElevation: 2872, webcams: { base: "https://www.skiresort.com/en/ski-resort/ischgl-samnaun-silvretta-arena/webcams/wcf447/", mid: "https://www.bergfex.com/silvretta-arena-ischgl-samnaun/webcams/c62/", summit: "https://www.bergfex.com/silvretta-arena-ischgl-samnaun/webcams/c2516/" } },
+  { slug: "mayrhofen", name: "Mayrhofen", country: "Austria", region: "Zillertal", massif: "Alps", lat: 47.1667, lon: 11.8667, baseElevation: 630, topElevation: 2500, webcams: { base: "https://www.bergfex.com/mayrhofen/webcams/c19341/", mid: "https://www.bergfex.com/mayrhofen/webcams/c886/", summit: "https://www.bergfex.com/mayrhofen/webcams/c13148/" } },
+  { slug: "obergurgl", name: "Obergurgl-Hochgurgl", country: "Austria", region: "Ötztal", massif: "Alps", lat: 46.8697, lon: 11.0261, baseElevation: 1930, topElevation: 3082, webcams: { base: "https://www.bergfex.com/obergurgl-hochgurgl/webcams/c1306/", mid: "https://www.bergfex.com/obergurgl-hochgurgl/webcams/c809/", summit: "https://www.bergfex.com/obergurgl-hochgurgl/webcams/c412/" } },
+  { slug: "saalbach", name: "Saalbach-Hinterglemm", country: "Austria", region: "Salzburgerland", massif: "Alps", lat: 47.3897, lon: 12.6383, baseElevation: 1003, topElevation: 2096, webcams: { base: "https://www.bergfex.com/saalbach-hinterglemm-leogang/webcams/c24789/", mid: "https://www.bergfex.com/saalbach-hinterglemm-leogang/webcams/c11396/", summit: "https://www.bergfex.com/saalbach-hinterglemm-leogang/webcams/c731/" } },
+  { slug: "kaprun", name: "Zell am See-Kaprun", country: "Austria", region: "Salzburgerland", massif: "Alps", lat: 47.2431, lon: 12.6931, baseElevation: 757, topElevation: 3029, webcams: { base: "https://www.foto-webcam.eu/webcam/zellamsee/", mid: "https://www.bergfex.com/kitzsteinhorn-kaprun/webcams/c521/", summit: "https://www.bergfex.com/kitzsteinhorn-kaprun/webcams/c520/" } },
+  { slug: "schladming", name: "Schladming", country: "Austria", region: "Styria", massif: "Alps", lat: 47.3947, lon: 13.6875, baseElevation: 745, topElevation: 2015, webcams: { base: "https://www.bergfex.com/schladming-planai/webcams/c11002/", mid: "https://www.bergfex.com/schladming-planai/webcams/c977/", summit: "https://www.bergfex.com/schladming-planai/webcams/c378/" } },
+  { slug: "bad-gastein", name: "Bad Gastein", country: "Austria", region: "Salzburgerland", massif: "Alps", lat: 47.1147, lon: 13.1339, baseElevation: 1002, topElevation: 2686, webcams: { base: "https://www.bergfex.com/badhofgastein/webcams/c5516/", mid: "https://www.bergfex.com/badgastein/webcams/c7353/", summit: "https://www.bergfex.com/badgastein/webcams/c13961/" } },
 
   // Italy — Alps (non-Dolomites)
-  { slug: "livigno", name: "Livigno", country: "Italy", region: "Lombardy", massif: "Alps", lat: 46.5379, lon: 10.1358, baseElevation: 1816, topElevation: 3000 },
-  { slug: "sestriere", name: "Sestriere", country: "Italy", region: "Piedmont", massif: "Alps", lat: 44.9578, lon: 6.8789, baseElevation: 2035, topElevation: 2823 },
-  { slug: "cervinia", name: "Cervinia", country: "Italy", region: "Aosta Valley", massif: "Alps", lat: 45.9308, lon: 7.6319, baseElevation: 2050, topElevation: 3883 },
+  { slug: "livigno", name: "Livigno", country: "Italy", region: "Lombardy", massif: "Alps", lat: 46.5379, lon: 10.1358, baseElevation: 1816, topElevation: 3000, webcams: { base: "https://www.skiresort.com/en/ski-resort/livigno/webcams/wcf1283/", mid: "https://www.skiresort.com/en/ski-resort/livigno/webcams/wcp52/", summit: "https://www.skiresort.com/en/ski-resort/livigno/webcams/wcf1336/" } },
+  { slug: "sestriere", name: "Sestriere", country: "Italy", region: "Piedmont", massif: "Alps", lat: 44.9578, lon: 6.8789, baseElevation: 2035, topElevation: 2823, webcams: { base: "https://www.bergfex.com/sestriere/webcams/c22828/", mid: "https://www.bergfex.com/sestriere/webcams/c22830/", summit: "https://www.bergfex.com/sestriere/webcams/c22829/" } },
+  { slug: "cervinia", name: "Cervinia", country: "Italy", region: "Aosta Valley", massif: "Alps", lat: 45.9308, lon: 7.6319, baseElevation: 2050, topElevation: 3883, webcams: { mid: "https://www.bergfex.com/breuil-cervinia/webcams/c4746/", summit: "https://www.bergfex.com/breuil-cervinia/webcams/c11812/" } },
+  { slug: "bormio", name: "Bormio", country: "Italy", region: "Lombardy", massif: "Alps", lat: 46.4678, lon: 10.3714, baseElevation: 1225, topElevation: 3012, webcams: { base: "https://www.skiresort.com/en/ski-resort/bormio-cima-bianca/webcams/wcf1214/", mid: "https://www.skiresort.com/en/ski-resort/bormio-cima-bianca/webcams/wcf365/", summit: "https://www.skiresort.com/en/ski-resort/bormio-cima-bianca/webcams/wcf1071/" } },
+  { slug: "la-thuile", name: "La Thuile", country: "Italy", region: "Aosta Valley", massif: "Alps", lat: 45.7175, lon: 6.9503, baseElevation: 1441, topElevation: 2641, webcams: { mid: "https://www.skiresort.com/en/ski-resort/espace-san-bernardo-la-rosiere-la-thuile/webcams/wcp102/" } },
 
   // Italy — Dolomites
-  { slug: "cortina", name: "Cortina d'Ampezzo", country: "Italy", region: "Dolomites", massif: "Dolomites", lat: 46.5405, lon: 12.1357, baseElevation: 1224, topElevation: 2930 },
-  { slug: "madonna-di-campiglio", name: "Madonna di Campiglio", country: "Italy", region: "Brenta Dolomites", massif: "Dolomites", lat: 46.2306, lon: 10.8253, baseElevation: 1550, topElevation: 2600 },
-  { slug: "val-gardena", name: "Val Gardena", country: "Italy", region: "Dolomites", massif: "Dolomites", lat: 46.5636, lon: 11.6756, baseElevation: 1236, topElevation: 2518 },
+  { slug: "cortina", name: "Cortina d'Ampezzo", country: "Italy", region: "Dolomites", massif: "Dolomites", lat: 46.5405, lon: 12.1357, baseElevation: 1224, topElevation: 2930, webcams: { base: "https://cortinadampezzo.it/en/webcam/", mid: "https://cortina.panomax.com/faloria", summit: "https://www.bergfex.com/tofana/webcams/c18069/" } },
+  { slug: "madonna-di-campiglio", name: "Madonna di Campiglio", country: "Italy", region: "Brenta Dolomites", massif: "Dolomites", lat: 46.2306, lon: 10.8253, baseElevation: 1550, topElevation: 2600, webcams: { base: "https://www.ski.it/en/info-live/webcams/madonna-di-campiglio-lago-montagnoli", mid: "https://www.ski.it/en/info-live/webcams/madonna-di-campiglio-spinale-180", summit: "https://www.ski.it/en/info-live/webcams/madonna-di-campiglio-groste-360" } },
+  { slug: "val-gardena", name: "Val Gardena", country: "Italy", region: "Dolomites", massif: "Dolomites", lat: 46.5636, lon: 11.6756, baseElevation: 1236, topElevation: 2518, webcams: { base: "https://www.val-gardena.com/en/webcams-val-gardena-dolomites/webcam-ortisei/", mid: "https://www.val-gardena.com/en/webcams-val-gardena-dolomites/webcam-ciampinoi-live/", summit: "https://www.val-gardena.com/en/webcams-val-gardena-dolomites/webcam-seceda-live/" } },
+  { slug: "alta-badia", name: "Alta Badia", country: "Italy", region: "Dolomites", massif: "Dolomites", lat: 46.5497, lon: 11.8767, baseElevation: 1568, topElevation: 2778, webcams: { base: "https://www.skylinewebcams.com/en/webcam/italia/trentino-alto-adige/bolzano/corvara-alta-badia-dolomiti.html", summit: "https://www.feratel.com/en/webcams/italy/corvara-piz-arlara-alta-badia.html" } },
+  { slug: "kronplatz", name: "Kronplatz", country: "Italy", region: "Dolomites", massif: "Dolomites", lat: 46.7386, lon: 11.96, baseElevation: 1354, topElevation: 2275, webcams: { base: "https://www.kronplatz.com/en/the-kronplatz/webcams", summit: "https://kronplatz.panomax.com/" } },
 
   // Andorra — Pyrenees
-  { slug: "grandvalira", name: "Grandvalira", country: "Andorra", region: "Pyrenees", massif: "Pyrenees", lat: 42.5763, lon: 1.6675, baseElevation: 1710, topElevation: 2640 },
-  { slug: "vallnord", name: "Vallnord", country: "Andorra", region: "Pyrenees", massif: "Pyrenees", lat: 42.5719, lon: 1.4886, baseElevation: 1550, topElevation: 2560 },
+  { slug: "grandvalira", name: "Grandvalira", country: "Andorra", region: "Pyrenees", massif: "Pyrenees", lat: 42.5763, lon: 1.6675, baseElevation: 1710, topElevation: 2640, webcams: { general: "https://www.grandvalira.com/en/resort/live-webcams" } },
+  { slug: "vallnord", name: "Vallnord", country: "Andorra", region: "Pyrenees", massif: "Pyrenees", lat: 42.5719, lon: 1.4886, baseElevation: 1550, topElevation: 2560, webcams: { general: "https://www.esquiades.com/en/skiresort/pal-arinsal/webcams/" } },
+
+  // Spain — Pyrenees
+  { slug: "baqueira-beret", name: "Baqueira-Beret", country: "Spain", region: "Val d'Aran", massif: "Pyrenees", lat: 42.6975, lon: 0.9425, baseElevation: 1500, topElevation: 2610, webcams: { general: "https://www.baqueira.es/en/webcams" } },
+  { slug: "formigal", name: "Formigal", country: "Spain", region: "Aragón", massif: "Pyrenees", lat: 42.7825, lon: -0.3819, baseElevation: 1500, topElevation: 2250, webcams: { general: "https://www.formigal-panticosa.com/webcam-formigal-panticosa.html" } },
 
   // UK — Scottish Highlands
-  { slug: "cairngorm", name: "Cairngorm Mountain", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1167, lon: -3.6425, baseElevation: 637, topElevation: 1097 },
-  { slug: "glenshee", name: "Glenshee", country: "United Kingdom", region: "Grampians", massif: "Highlands", lat: 56.8608, lon: -3.4256, baseElevation: 650, topElevation: 920 },
-  { slug: "glencoe", name: "Glencoe Mountain", country: "United Kingdom", region: "Lochaber", massif: "Highlands", lat: 56.6389, lon: -4.9497, baseElevation: 300, topElevation: 1108 },
-  { slug: "nevis-range", name: "Nevis Range", country: "United Kingdom", region: "Lochaber", massif: "Highlands", lat: 56.8181, lon: -5.0106, baseElevation: 650, topElevation: 1221 },
-  { slug: "the-lecht", name: "The Lecht", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1333, lon: -3.2333, baseElevation: 600, topElevation: 793 },
+  { slug: "cairngorm", name: "Cairngorm Mountain", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1167, lon: -3.6425, baseElevation: 637, topElevation: 1097, webcams: { general: "https://www.skiresort.com/en/ski-resort/cairngorm-mountain/webcams/" } },
+  { slug: "glenshee", name: "Glenshee", country: "United Kingdom", region: "Grampians", massif: "Highlands", lat: 56.8608, lon: -3.4256, baseElevation: 650, topElevation: 920, webcams: { general: "https://www.ski-glenshee.co.uk/Webcam" } },
+  { slug: "glencoe", name: "Glencoe Mountain", country: "United Kingdom", region: "Lochaber", massif: "Highlands", lat: 56.6389, lon: -4.9497, baseElevation: 300, topElevation: 1108, webcams: { general: "https://www.glencoemountain.co.uk/webcams/" } },
+  { slug: "nevis-range", name: "Nevis Range", country: "United Kingdom", region: "Lochaber", massif: "Highlands", lat: 56.8181, lon: -5.0106, baseElevation: 650, topElevation: 1221, webcams: { general: "https://www.nevisrange.co.uk/webcams/" } },
+  { slug: "the-lecht", name: "The Lecht", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1333, lon: -3.2333, baseElevation: 600, topElevation: 793, webcams: { general: "https://www.lecht.co.uk/webcam" } },
 ];
 
 export function getResortBySlug(slug: string): Resort | undefined {

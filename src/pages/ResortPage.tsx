@@ -4,6 +4,7 @@ import { useResortForecast } from "../lib/useResortForecast";
 import { massifTheme } from "../lib/massifTheme";
 import { ElevationSummary } from "../components/ElevationSummary";
 import { DailyForecastList } from "../components/DailyForecastList";
+import { WebcamLinks } from "../components/WebcamLinks";
 
 export function ResortPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -57,6 +58,8 @@ export function ResortPage() {
             <DailyForecastList title="Mid — 7 day" days={data.mid.daily} />
             <DailyForecastList title="Summit — 7 day" days={data.top.daily} />
           </div>
+
+          <WebcamLinks webcams={resort.webcams} />
         </div>
       )}
     </div>
