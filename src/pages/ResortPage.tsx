@@ -53,13 +53,13 @@ export function ResortPage() {
             <ElevationSummary label="Summit" forecast={data.top} />
           </div>
 
+          <WebcamLinks webcams={resort.webcams} />
+
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             <DailyForecastList title="Base — 7 day" days={data.base.daily} />
             <DailyForecastList title="Mid — 7 day" days={data.mid.daily} />
             <DailyForecastList title="Summit — 7 day" days={data.top.daily} />
           </div>
-
-          <WebcamLinks webcams={resort.webcams} />
         </div>
       )}
     </div>
