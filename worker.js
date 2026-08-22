@@ -3,9 +3,12 @@ import { WEBCAM_SOURCES } from "./webcam-sources.js";
 const SNAPSHOT_PATH = /^\/webcam-snapshot\/([a-z0-9-]+)\/([a-z]+)\.jpg$/;
 const REFRESH_PATH = "/webcam-snapshot-refresh";
 
-// Free-plan Workers cap outbound fetch() calls at 50 per invocation, so a
-// single call can't capture all ~145 sources at once -- chunk safely under that.
-const CHUNK_SIZE = 35;
+// Free-plan Workers cap outbound fetch() calls at 50 per invocation. We
+// spread the ~145 sources across 5 staggered cron triggers (see
+// wrangler.jsonc), each processing one fixed chunk directly -- self-fetching
+// the same route from within scheduled() turned out to be unreliable (522s).
+const CHUNK_SIZE = 30;
+const CRON_SCHEDULE = ["0 11 * * *", "6 11 * * *", "12 11 * * *", "18 11 * * *", "24 11 * * *"];
 
 function chunk(array, size) {
   const chunks = [];
@@ -36,30 +39,6 @@ async function captureSnapshots(env, keys) {
   return { total: results.length, failed: failures.length, failures };
 }
 
-// Runs each chunk as its own Worker invocation (a real HTTP round-trip to
-// this same route) so every chunk gets a fresh subrequest budget.
-async function captureAllChunked(env) {
-  const chunks = chunk(Object.keys(WEBCAM_SOURCES), CHUNK_SIZE);
-  const summary = { total: 0, failed: 0, failures: [] };
-
-  for (const keys of chunks) {
-    const res = await fetch(`https://www.snowbuddy.co.uk${REFRESH_PATH}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.SNAPSHOT_REFRESH_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ keys }),
-    });
-    const chunkSummary = await res.json();
-    summary.total += chunkSummary.total ?? 0;
-    summary.failed += chunkSummary.failed ?? 0;
-    summary.failures.push(...(chunkSummary.failures ?? []));
-  }
-
-  return summary;
-}
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -83,9 +62,8 @@ export default {
       });
     }
 
-    // Manual trigger for ops -- lets us (or the cron) refresh snapshots on
-    // demand. POST { keys: [...] } to capture a specific chunk, or POST with
-    // no body / an empty object to capture everything (self-chunked).
+    // Manual trigger for ops -- POST { keys: [...] } to capture a specific
+    // subset (keep it under ~40 keys per call to stay under the subrequest cap).
     if (url.pathname === REFRESH_PATH && request.method === "POST") {
       const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
       if (!env.SNAPSHOT_REFRESH_TOKEN || token !== env.SNAPSHOT_REFRESH_TOKEN) {
@@ -95,9 +73,10 @@ export default {
       try {
         body = await request.json();
       } catch {
-        // no body is fine -- means "capture everything"
+        // no/invalid body -- fall through to the default chunk below
       }
-      const summary = body.keys?.length ? await captureSnapshots(env, body.keys) : await captureAllChunked(env);
+      const keys = body.keys?.length ? body.keys : Object.keys(WEBCAM_SOURCES).slice(0, CHUNK_SIZE);
+      const summary = await captureSnapshots(env, keys);
       return new Response(JSON.stringify(summary, null, 2), {
         headers: { "Content-Type": "application/json" },
       });
@@ -106,12 +85,21 @@ export default {
     return env.ASSETS.fetch(request);
   },
 
-  // Runs daily around midday CET, refreshing the cached snapshot for every
-  // resort/tier that has a verified direct-image webcam source.
+  // Runs daily as 5 staggered triggers (see wrangler.jsonc), each capturing
+  // one fixed chunk of WEBCAM_SOURCES so no single invocation exceeds the
+  // free-plan subrequest limit.
   async scheduled(event, env) {
-    const summary = await captureAllChunked(env);
+    const chunkIndex = CRON_SCHEDULE.indexOf(event.cron);
+    const chunks = chunk(Object.keys(WEBCAM_SOURCES), CHUNK_SIZE);
+    const keys = chunks[chunkIndex] ?? [];
+    if (keys.length === 0) return;
+
+    const summary = await captureSnapshots(env, keys);
     if (summary.failed > 0) {
-      console.log(`Webcam snapshot cron: ${summary.failed}/${summary.total} failed`, summary.failures);
+      console.log(
+        `Webcam snapshot cron (chunk ${chunkIndex}): ${summary.failed}/${summary.total} failed`,
+        summary.failures
+      );
     }
   },
 };
