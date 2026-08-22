@@ -1,7 +1,34 @@
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/workerd";
 import { WEBCAM_SOURCES } from "./webcam-sources.js";
 
 const SNAPSHOT_PATH = /^\/webcam-snapshot\/([a-z0-9-]+)\/([a-z]+)\.jpg$/;
 const REFRESH_PATH = "/webcam-snapshot-refresh";
+
+// Tiles only ever display these at ~128px tall, but several sources (Skaping,
+// roundshot) serve multi-megapixel originals -- downscale and re-encode
+// before caching so we're not shipping 2-7MB files for a small thumbnail.
+const MAX_DIMENSION = 800;
+const JPEG_QUALITY = 72;
+
+function compressImage(buffer) {
+  const input = PhotonImage.new_from_byteslice(new Uint8Array(buffer));
+  try {
+    const width = input.get_width();
+    const height = input.get_height();
+    const scale = Math.min(1, MAX_DIMENSION / Math.max(width, height));
+    const targetWidth = Math.max(1, Math.round(width * scale));
+    const targetHeight = Math.max(1, Math.round(height * scale));
+
+    const output = scale < 1 ? resize(input, targetWidth, targetHeight, SamplingFilter.Triangle) : input;
+    try {
+      return output.get_bytes_jpeg(JPEG_QUALITY);
+    } finally {
+      if (output !== input) output.free();
+    }
+  } finally {
+    input.free();
+  }
+}
 
 // Free-plan Workers cap outbound fetch() calls at 50 per invocation, and the
 // account is also capped at 5 cron triggers total (shared across every
@@ -29,7 +56,8 @@ async function captureSnapshots(env, keys) {
       const contentType = res.headers.get("content-type") || "";
       if (!contentType.startsWith("image/")) throw new Error(`${key}: not an image (${contentType})`);
       const buffer = await res.arrayBuffer();
-      await env.WEBCAM_KV.put(key, buffer);
+      const compressed = compressImage(buffer);
+      await env.WEBCAM_KV.put(key, compressed);
     })
   );
 
