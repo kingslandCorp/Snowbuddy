@@ -22,7 +22,11 @@ function WebcamTile({ href, title, imgSrc }: { href?: string; title: string; img
   const showImage = Boolean(imgSrc) && !imgFailed;
 
   const visual = (
-    <div className="relative flex h-32 items-center justify-center overflow-hidden rounded-md bg-slate-100">
+    <div
+      className={`relative flex h-32 items-center justify-center overflow-hidden rounded-md bg-slate-100 ${
+        showImage ? "" : "opacity-50"
+      }`}
+    >
       {showImage && (
         <img src={imgSrc} alt={title} onError={() => setImgFailed(true)} className="h-full w-full object-cover" />
       )}
@@ -31,11 +35,7 @@ function WebcamTile({ href, title, imgSrc }: { href?: string; title: string; img
   );
 
   if (!href) {
-    return (
-      <div title={`${title} (unavailable)`} className="opacity-50">
-        {visual}
-      </div>
-    );
+    return <div title={showImage ? title : `${title} (unavailable)`}>{visual}</div>;
   }
 
   return (
@@ -64,9 +64,9 @@ export function WebcamLinks({ slug, webcams }: { slug: string; webcams?: ResortW
       {TIERS.map(({ key, label }) => (
         <div key={key} className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
           <WebcamTile
-            href={webcams[key]}
+            href={webcams[key] ?? webcams.general}
             title={`${label} webcam`}
-            imgSrc={webcams[key] ? `/webcam-snapshot/${slug}/${key}.jpg` : undefined}
+            imgSrc={`/webcam-snapshot/${slug}/${key}.jpg`}
           />
         </div>
       ))}
