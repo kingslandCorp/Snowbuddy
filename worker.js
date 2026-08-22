@@ -3,12 +3,14 @@ import { WEBCAM_SOURCES } from "./webcam-sources.js";
 const SNAPSHOT_PATH = /^\/webcam-snapshot\/([a-z0-9-]+)\/([a-z]+)\.jpg$/;
 const REFRESH_PATH = "/webcam-snapshot-refresh";
 
-// Free-plan Workers cap outbound fetch() calls at 50 per invocation. We
-// spread the ~145 sources across 5 staggered cron triggers (see
-// wrangler.jsonc), each processing one fixed chunk directly -- self-fetching
-// the same route from within scheduled() turned out to be unreliable (522s).
+// Free-plan Workers cap outbound fetch() calls at 50 per invocation, and the
+// account is also capped at 5 cron triggers total (shared across every
+// project, not just this one) -- so we can't just add more crons to cover
+// all ~145 sources in one day. Instead a single daily cron rotates through
+// fixed-size chunks, cycling back to the start once it reaches the end, so
+// every resort gets refreshed every few days rather than every day.
 const CHUNK_SIZE = 30;
-const CRON_SCHEDULE = ["0 11 * * *", "6 11 * * *", "12 11 * * *", "18 11 * * *", "24 11 * * *"];
+const CHUNK_INDEX_KEY = "cron-chunk-index";
 
 function chunk(array, size) {
   const chunks = [];
@@ -85,19 +87,20 @@ export default {
     return env.ASSETS.fetch(request);
   },
 
-  // Runs daily as 5 staggered triggers (see wrangler.jsonc), each capturing
-  // one fixed chunk of WEBCAM_SOURCES so no single invocation exceeds the
-  // free-plan subrequest limit.
+  // Runs once daily. Captures one chunk of WEBCAM_SOURCES and advances a
+  // persisted index so the next run picks up where this one left off,
+  // cycling through everything over a few days.
   async scheduled(event, env) {
-    const chunkIndex = CRON_SCHEDULE.indexOf(event.cron);
     const chunks = chunk(Object.keys(WEBCAM_SOURCES), CHUNK_SIZE);
-    const keys = chunks[chunkIndex] ?? [];
-    if (keys.length === 0) return;
+    const stored = await env.WEBCAM_KV.get(CHUNK_INDEX_KEY);
+    const chunkIndex = stored ? Number(stored) % chunks.length : 0;
 
-    const summary = await captureSnapshots(env, keys);
+    const summary = await captureSnapshots(env, chunks[chunkIndex]);
+    await env.WEBCAM_KV.put(CHUNK_INDEX_KEY, String((chunkIndex + 1) % chunks.length));
+
     if (summary.failed > 0) {
       console.log(
-        `Webcam snapshot cron (chunk ${chunkIndex}): ${summary.failed}/${summary.total} failed`,
+        `Webcam snapshot cron (chunk ${chunkIndex}/${chunks.length}): ${summary.failed}/${summary.total} failed`,
         summary.failures
       );
     }
