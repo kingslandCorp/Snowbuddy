@@ -159,4 +159,17 @@ export const WEBCAM_SOURCES = {
   "glencoe-summit": "https://www.winterhighland.info/cams/glencoe/summit.jpeg",
   "the-lecht-summit": "https://lecht.co.uk/inc/webcam/inc/ski-lifts-feed.php",
   "glenshee-general": "https://www.trinum.com/ibox/ftpcam/ski-scotland_glenshee.jpg",
+
+  // Gap-fills -- the one missing tier per resort, found in a follow-up pass
+  "zermatt-summit": "https://images.bergfex.at/webcams/?id=1219",
+  "verbier-base": "https://images.bergfex.at/webcams/?id=9292",
+  "verbier-summit": "https://images.bergfex.at/webcams/?id=4921",
+  "st-moritz-base": "https://backend.roundshot.com/cams/1649/default",
+  "grindelwald-summit": "https://images.bergfex.at/webcams/?id=1543",
+  "saas-fee-base": "https://images.bergfex.at/webcams/?id=21943",
+  "gstaad-base": "https://images.bergfex.at/webcams/?id=12380",
+  "andermatt-base": "https://images.bergfex.at/webcams/?id=14341",
+  "livigno-mid": "https://images.bergfex.at/webcams/?id=14507",
+  "cortina-summit": "https://wtvhspt.feratel.com/hotspot/37/6290/3.jpeg",
+  "madonna-di-campiglio-summit": "https://images.bergfex.at/webcams/?id=12326",
 };
