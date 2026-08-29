@@ -1,13 +1,14 @@
 import type { ElevationForecast } from "../lib/openMeteo";
 import { describeWeatherCode } from "../lib/weatherCodes";
 
-export function ElevationSummary({ forecast }: { forecast: ElevationForecast }) {
+export function ElevationSummary({ label, forecast }: { label: string; forecast: ElevationForecast }) {
   const weather = describeWeatherCode(forecast.current.weatherCode);
 
   return (
     <div className="flex-1 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-center justify-end">
-        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-500">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold tracking-wide text-slate-400 sm:hidden">{label.toUpperCase()}</span>
+        <span className="ml-auto rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-500">
           {forecast.elevation}m
         </span>
       </div>

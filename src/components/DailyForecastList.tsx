@@ -9,9 +9,12 @@ function formatDay(dateStr: string, index: number) {
 
 const POWDER_THRESHOLD_CM = 5;
 
-export function DailyForecastList({ days }: { days: DailyForecast[] }) {
+export function DailyForecastList({ label, days }: { label: string; days: DailyForecast[] }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <span className="mb-2 block text-xs font-semibold tracking-wide text-slate-400 sm:hidden">
+        {label.toUpperCase()}
+      </span>
       <div className="flex flex-col divide-y divide-slate-100">
         {days.map((day, i) => {
           const weather = describeWeatherCode(day.weatherCode);

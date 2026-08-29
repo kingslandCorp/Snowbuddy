@@ -63,6 +63,9 @@ export function WebcamLinks({ slug, webcams }: { slug: string; webcams?: ResortW
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {TIERS.map(({ key, label }) => (
         <div key={key} className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+          <span className="mb-2 block text-xs font-semibold tracking-wide text-slate-400 sm:hidden">
+            {label.toUpperCase()}
+          </span>
           <WebcamTile
             href={webcams[key] ?? webcams.general}
             title={`${label} webcam`}

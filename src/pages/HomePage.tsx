@@ -127,7 +127,7 @@ export function HomePage() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search resorts, regions, countries…"
+                placeholder="Search resorts, regions…"
                 className="w-full rounded-full border border-white/40 bg-white py-3.5 pr-5 pl-11 text-slate-900 placeholder:text-slate-400 shadow-lg shadow-blue-900/20 transition focus:border-white focus:ring-4 focus:ring-cyan-200/50 focus:outline-none"
               />
             </div>
@@ -180,16 +180,16 @@ export function HomePage() {
               const theme = massifTheme[group.massif];
               return (
                 <section key={group.massif}>
-                  <div className="mb-4 flex items-center gap-3">
-                    <h2 className={`font-display text-3xl tracking-wide ${theme.text}`}>
+                  <div className="mb-4 flex items-center gap-2 sm:gap-3">
+                    <h2 className={`font-display text-2xl tracking-wide whitespace-nowrap sm:text-3xl ${theme.text}`}>
                       {group.massif.toUpperCase()}
                     </h2>
                     <span className="text-sm whitespace-nowrap text-slate-400">
                       {group.resorts.length} resort{group.resorts.length === 1 ? "" : "s"}
                     </span>
-                    <div className={`h-px flex-1 bg-gradient-to-r ${theme.gradient} opacity-30`} />
-                    <MassifIcon massif={group.massif} className="h-14 shrink-0 text-cyan-600" />
-                    <div className={`h-px flex-1 bg-gradient-to-l ${theme.gradient} opacity-30`} />
+                    <div className={`h-px min-w-4 flex-1 bg-gradient-to-r ${theme.gradient} opacity-30`} />
+                    <MassifIcon massif={group.massif} className="h-8 shrink-0 text-cyan-600 sm:h-14" />
+                    <div className={`h-px min-w-4 flex-1 bg-gradient-to-l ${theme.gradient} opacity-30`} />
                   </div>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {group.resorts.map((resort) => (

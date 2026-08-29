@@ -65,9 +65,9 @@ export function ResortPage() {
           <TierHeaderRow />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <ElevationSummary forecast={data.base} />
-            <ElevationSummary forecast={data.mid} />
-            <ElevationSummary forecast={data.top} />
+            <ElevationSummary label="Base" forecast={data.base} />
+            <ElevationSummary label="Mid" forecast={data.mid} />
+            <ElevationSummary label="Summit" forecast={data.top} />
           </div>
 
           {hasWebcams && (
@@ -80,9 +80,9 @@ export function ResortPage() {
           <div>
             <h2 className="font-display mb-3 text-lg tracking-wide text-slate-900">7 DAY</h2>
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-              <DailyForecastList days={data.base.daily} />
-              <DailyForecastList days={data.mid.daily} />
-              <DailyForecastList days={data.top.daily} />
+              <DailyForecastList label="Base" days={data.base.daily} />
+              <DailyForecastList label="Mid" days={data.mid.daily} />
+              <DailyForecastList label="Summit" days={data.top.daily} />
             </div>
           </div>
         </div>
