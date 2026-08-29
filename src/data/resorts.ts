@@ -102,11 +102,11 @@ export const resorts: Resort[] = [
   { slug: "formigal", name: "Formigal", country: "Spain", region: "Aragón", massif: "Pyrenees", lat: 42.7825, lon: -0.3819, baseElevation: 1500, topElevation: 2250, webcams: { general: "https://www.formigal-panticosa.com/webcam-formigal-panticosa.html" } },
 
   // UK — Scottish Highlands
-  { slug: "cairngorm", name: "Cairngorm Mountain", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1167, lon: -3.6425, baseElevation: 637, topElevation: 1097, webcams: { general: "https://www.skiresort.com/en/ski-resort/cairngorm-mountain/webcams/" } },
+  { slug: "cairngorm", name: "Cairngorm Mountain", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1167, lon: -3.6425, baseElevation: 637, topElevation: 1097, webcams: { base: "https://www.cairngormmountain.co.uk/live-webcams/", mid: "https://www.cairngormmountain.co.uk/live-webcams/", summit: "https://www.cairngormmountain.co.uk/live-webcams/", general: "https://www.skiresort.com/en/ski-resort/cairngorm-mountain/webcams/" } },
   { slug: "glenshee", name: "Glenshee", country: "United Kingdom", region: "Grampians", massif: "Highlands", lat: 56.8608, lon: -3.4256, baseElevation: 650, topElevation: 920, webcams: { general: "https://www.ski-glenshee.co.uk/Webcam" } },
-  { slug: "glencoe", name: "Glencoe Mountain", country: "United Kingdom", region: "Lochaber", massif: "Highlands", lat: 56.6389, lon: -4.9497, baseElevation: 300, topElevation: 1108, webcams: { general: "https://www.glencoemountain.co.uk/webcams/" } },
+  { slug: "glencoe", name: "Glencoe Mountain", country: "United Kingdom", region: "Lochaber", massif: "Highlands", lat: 56.6389, lon: -4.9497, baseElevation: 300, topElevation: 1108, webcams: { base: "https://www.glencoemountain.co.uk/webcams/", mid: "https://www.glencoemountain.co.uk/webcams/", summit: "https://www.glencoemountain.co.uk/webcams/", general: "https://www.glencoemountain.co.uk/webcams/" } },
   { slug: "nevis-range", name: "Nevis Range", country: "United Kingdom", region: "Lochaber", massif: "Highlands", lat: 56.8181, lon: -5.0106, baseElevation: 650, topElevation: 1221, webcams: { general: "https://www.nevisrange.co.uk/webcams/" } },
-  { slug: "the-lecht", name: "The Lecht", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1333, lon: -3.2333, baseElevation: 600, topElevation: 793, webcams: { general: "https://www.lecht.co.uk/webcam" } },
+  { slug: "the-lecht", name: "The Lecht", country: "United Kingdom", region: "Cairngorms", massif: "Highlands", lat: 57.1333, lon: -3.2333, baseElevation: 600, topElevation: 793, webcams: { summit: "https://www.lecht.co.uk/webcam", general: "https://www.lecht.co.uk/webcam" } },
 ];
 
 export function getResortBySlug(slug: string): Resort | undefined {
