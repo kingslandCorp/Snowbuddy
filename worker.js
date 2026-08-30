@@ -20,8 +20,8 @@ const CHUNK_INDEX_KEY = "cron-chunk-index";
 // image per request doesn't -- that was reliable in testing -- so this runs
 // at serve time instead, with the result cached at the edge so only the
 // first request per cache window actually pays for it.
-const MAX_DIMENSION = 640;
-const JPEG_QUALITY = 68;
+const MAX_DIMENSION = 420;
+const JPEG_QUALITY = 60;
 
 function compressImage(buffer) {
   const input = PhotonImage.new_from_byteslice(new Uint8Array(buffer));
@@ -86,7 +86,7 @@ export default {
       // Internal cache key only -- bump when the compression logic changes
       // so old (e.g. pre-compression) cached responses can't shadow it.
       const cache = caches.default;
-      const cacheKey = new Request(`${url.toString()}${url.search ? "&" : "?"}_cv=3`, request);
+      const cacheKey = new Request(`${url.toString()}${url.search ? "&" : "?"}_cv=4`, request);
       const cached = await cache.match(cacheKey);
       if (cached) return cached;
 
