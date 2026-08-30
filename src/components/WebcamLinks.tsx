@@ -19,7 +19,12 @@ function CameraIcon({ className }: { className?: string }) {
 /** Shows the latest captured snapshot as the tile's visual; the camera glyph is a faint overlay, not the content. */
 function WebcamTile({ href, title, imgSrc }: { href?: string; title: string; imgSrc?: string }) {
   const [imgFailed, setImgFailed] = useState(false);
+  // Serve-time compression occasionally trips the Workers CPU limit
+  // transiently -- a failed attempt is never cached, so a same-URL retry
+  // almost always succeeds. Try once before giving up.
+  const [retried, setRetried] = useState(false);
   const showImage = Boolean(imgSrc) && !imgFailed;
+  const src = retried && imgSrc ? `${imgSrc}?retry=1` : imgSrc;
 
   const visual = (
     <div
@@ -28,7 +33,12 @@ function WebcamTile({ href, title, imgSrc }: { href?: string; title: string; img
       }`}
     >
       {showImage && (
-        <img src={imgSrc} alt={title} onError={() => setImgFailed(true)} className="h-full w-full object-cover" />
+        <img
+          src={src}
+          alt={title}
+          onError={() => (retried ? setImgFailed(true) : setRetried(true))}
+          className="h-full w-full object-cover"
+        />
       )}
       <CameraIcon className={`absolute h-8 w-8 ${showImage ? "text-white/80 drop-shadow" : "text-slate-300"}`} />
     </div>

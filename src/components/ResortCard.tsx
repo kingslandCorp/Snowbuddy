@@ -18,10 +18,23 @@ const STATIC_PHOTOS: Record<string, { src: string; credit: string }> = {
 
 function usePhotoSrc(slug: string) {
   const [stageIndex, setStageIndex] = useState(0);
+  // Serve-time compression occasionally trips the Workers CPU limit
+  // transiently -- a failed attempt is never cached, so a same-URL retry
+  // almost always succeeds. Try once before giving up on this tier.
+  const [retried, setRetried] = useState(false);
+
   if (stageIndex < PHOTO_FALLBACK_ORDER.length) {
+    const base = `/webcam-snapshot/${slug}/${PHOTO_FALLBACK_ORDER[stageIndex]}.jpg`;
     return {
-      src: `/webcam-snapshot/${slug}/${PHOTO_FALLBACK_ORDER[stageIndex]}.jpg`,
-      onError: () => setStageIndex((i) => i + 1),
+      src: retried ? `${base}?retry=1` : base,
+      onError: () => {
+        if (retried) {
+          setStageIndex((i) => i + 1);
+          setRetried(false);
+        } else {
+          setRetried(true);
+        }
+      },
       credit: null as string | null,
     };
   }
@@ -45,6 +58,8 @@ export function ResortCard({ resort }: { resort: Resort }) {
           src={photo.src}
           onError={photo.onError}
           alt=""
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full scale-100 object-cover transition duration-500 group-hover:scale-110"
         />
       ) : (
