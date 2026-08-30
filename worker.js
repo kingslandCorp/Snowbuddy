@@ -86,7 +86,7 @@ export default {
       // Internal cache key only -- bump when the compression logic changes
       // so old (e.g. pre-compression) cached responses can't shadow it.
       const cache = caches.default;
-      const cacheKey = new Request(`${url.toString()}${url.search ? "&" : "?"}_cv=2`, request);
+      const cacheKey = new Request(`${url.toString()}${url.search ? "&" : "?"}_cv=3`, request);
       const cached = await cache.match(cacheKey);
       if (cached) return cached;
 
