@@ -1,3 +1,4 @@
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon/workerd";
 import { WEBCAM_SOURCES } from "./webcam-sources.js";
 
 const SNAPSHOT_PATH = /^\/webcam-snapshot\/([a-z0-9-]+)\/([a-z]+)\.jpg$/;
@@ -6,11 +7,42 @@ const REFRESH_PATH = "/webcam-snapshot-refresh";
 // Free-plan Workers cap outbound fetch() calls at 50 per invocation, and the
 // account is also capped at 5 cron triggers total (shared across every
 // project, not just this one) -- so we can't just add more crons to cover
-// all ~145 sources in one day. Instead a single daily cron rotates through
+// all ~156 sources in one day. Instead a single daily cron rotates through
 // fixed-size chunks, cycling back to the start once it reaches the end, so
 // every resort gets refreshed every few days rather than every day.
 const CHUNK_SIZE = 30;
 const CHUNK_INDEX_KEY = "cron-chunk-index";
+
+// Some sources (Skaping, roundshot) serve multi-megapixel originals -- up to
+// several MB each -- for a tile that only ever displays at a few hundred px.
+// Earlier attempts to compress a whole capture *batch* in one Worker
+// invocation reliably blew the free-plan CPU budget. Compressing exactly one
+// image per request doesn't -- that was reliable in testing -- so this runs
+// at serve time instead, with the result cached at the edge so only the
+// first request per cache window actually pays for it.
+const MAX_DIMENSION = 640;
+const JPEG_QUALITY = 68;
+
+function compressImage(buffer) {
+  const input = PhotonImage.new_from_byteslice(new Uint8Array(buffer));
+  try {
+    const width = input.get_width();
+    const height = input.get_height();
+    const scale = Math.min(1, MAX_DIMENSION / Math.max(width, height));
+    if (scale >= 1) return input.get_bytes_jpeg(JPEG_QUALITY);
+
+    const targetWidth = Math.max(1, Math.round(width * scale));
+    const targetHeight = Math.max(1, Math.round(height * scale));
+    const output = resize(input, targetWidth, targetHeight, SamplingFilter.Triangle);
+    try {
+      return output.get_bytes_jpeg(JPEG_QUALITY);
+    } finally {
+      output.free();
+    }
+  } finally {
+    input.free();
+  }
+}
 
 function chunk(array, size) {
   const chunks = [];
@@ -42,7 +74,7 @@ async function captureSnapshots(env, keys) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.hostname === "snowbuddy.co.uk") {
       url.hostname = "www.snowbuddy.co.uk";
@@ -51,17 +83,32 @@ export default {
 
     const snapshotMatch = url.pathname.match(SNAPSHOT_PATH);
     if (snapshotMatch) {
+      const cache = caches.default;
+      const cacheKey = new Request(url.toString(), request);
+      const cached = await cache.match(cacheKey);
+      if (cached) return cached;
+
       const [, slug, tier] = snapshotMatch;
       const image = await env.WEBCAM_KV.get(`${slug}-${tier}`, "arrayBuffer");
       if (!image) {
         return new Response("Not found", { status: 404 });
       }
-      return new Response(image, {
+
+      let body = image;
+      try {
+        body = compressImage(image);
+      } catch (err) {
+        console.log(`compress failed for ${slug}-${tier}: ${err?.message ?? err}`);
+      }
+
+      const response = new Response(body, {
         headers: {
           "Content-Type": "image/jpeg",
           "Cache-Control": "public, max-age=3600",
         },
       });
+      ctx.waitUntil(cache.put(cacheKey, response.clone()));
+      return response;
     }
 
     // Manual trigger for ops -- POST { keys: [...] } to capture a specific
