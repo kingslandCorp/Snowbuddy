@@ -55,6 +55,14 @@ export function HomePage() {
         onMouseLeave={handleHeroMouseLeave}
         className="relative overflow-hidden bg-gradient-to-b from-sky-400 via-blue-600 to-blue-700"
       >
+        <img
+          src="/photos/hero-action.jpg"
+          alt=""
+          className="absolute inset-0 h-full w-full scale-110 object-cover object-[45%_35%] mix-blend-luminosity"
+          style={{ transform: "scale(1.1) translateX(calc(var(--mx, 0) * -22px))" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-400/70 via-blue-600/55 to-blue-700/80" />
+
         <div className="hero-glow pointer-events-none absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-cyan-200/30 blur-3xl" />
         <div className="hero-glow pointer-events-none absolute top-0 right-1/4 h-72 w-72 rounded-full bg-white/20 blur-3xl [animation-delay:-7s]" />
         <div className="snowfall pointer-events-none absolute inset-0" />
@@ -89,6 +97,7 @@ export function HomePage() {
             fill="currentColor"
           />
         </svg>
+
 
         <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-15 text-center sm:pt-12">
           <h1 className="font-display rise-in text-6xl tracking-wide text-white drop-shadow-sm sm:text-8xl">

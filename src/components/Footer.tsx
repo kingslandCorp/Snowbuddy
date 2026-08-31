@@ -13,6 +13,7 @@ export function Footer() {
         </a>
         . SnowBuddy is not affiliated with any resort operator.
       </p>
+      <p className="mt-1 text-slate-400">Homepage photo: Failavaga, CC BY-SA 4.0</p>
     </footer>
   );
 }
