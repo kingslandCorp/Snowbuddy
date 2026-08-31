@@ -58,7 +58,7 @@ function makeFlake(width: number, height: number, y?: number): Flake {
     vx: 0,
     vy: 0,
     size: 5 + Math.random() * 6,
-    speed: 0.12 + Math.random() * 0.22,
+    speed: 0.162 + Math.random() * 0.297,
     sway: 12 + Math.random() * 22,
     swaySpeed: 0.004 + Math.random() * 0.008,
     swayOffset: Math.random() * Math.PI * 2,
