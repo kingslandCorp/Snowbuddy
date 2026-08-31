@@ -102,7 +102,14 @@ export function HomePage() {
         <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-15 text-center sm:pt-12">
           <h1 className="font-display rise-in text-6xl tracking-wide text-white drop-shadow-sm sm:text-8xl">
             FIND THE{" "}
-            <span className="relative inline-block text-cyan-400" style={{ textShadow: "0 0 40px rgba(6,182,212,0.8)" }}>
+            <span
+              className="relative inline-block text-[#5fe3ff]"
+              style={{
+                WebkitTextStroke: "1.5px white",
+                paintOrder: "stroke fill",
+                textShadow: "0 0 30px rgba(34,211,238,0.85), 0 0 60px rgba(14,165,233,0.55)",
+              }}
+            >
               SNOW
               <svg
                 className="pointer-events-none absolute -bottom-1 left-0 h-4 w-full sm:-bottom-2 sm:h-6"
