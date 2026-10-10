@@ -2,6 +2,7 @@ import { useMemo, useState, type MouseEvent } from "react";
 import { massifs, resorts, type Massif } from "../data/resorts";
 import { ResortCard } from "../components/ResortCard";
 import { MassifIcon } from "../components/MassifIcon";
+import { SnowHeatmap } from "../components/SnowHeatmap";
 import { massifTheme } from "../lib/massifTheme";
 import { usePageMeta } from "../lib/usePageMeta";
 
@@ -187,6 +188,8 @@ export function HomePage() {
             );
           })}
         </div>
+
+        {massif === "All" && <SnowHeatmap />}
 
         {groups.length === 0 ? (
           <p className="text-center text-slate-500">No resorts match "{query}".</p>
